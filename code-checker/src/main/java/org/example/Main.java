@@ -1,6 +1,8 @@
 package org.example;
 
 import org.example.code.checker.parser.markdown.preprocess.PreProcessor;
+import org.example.code.checker.parser.markdown.parser.MdAstGenerator;
+import org.antlr.v4.runtime.tree.ParseTree;
 
 public class Main {
     public static void main(String[] args) {
@@ -21,5 +23,18 @@ public class Main {
 
         System.out.println("\n=== Processed ===");
         System.out.println(processed);
+
+        ParseTree tree = MdAstGenerator.generateAst(processed);
+        System.out.println("\n=== AST (tree) ===");
+        printTree(tree, "");
+    }
+
+    private static void printTree(ParseTree node, String indent) {
+        if (node == null) {
+            return;
+        }
+        for (int i = 0; i < node.getChildCount(); i++) {
+            printTree(node.getChild(i), indent + "  ");
+        }
     }
 }

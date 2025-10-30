@@ -38,24 +38,8 @@
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
-            <!-- ANTLR Maven Plugin -->
-            <plugin>
-                <groupId>org.antlr</groupId>
-                <artifactId>antlr4-maven-plugin</artifactId>
-                <version>${antlr4.version}</version>
-                <configuration>
-                    <sourceDirectory>${project.basedir}/src/main/antlr4</sourceDirectory>
-                    <outputDirectory>${project.build.directory}/generated-sources/antlr4</outputDirectory>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>antlr4</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+            
+
             <!-- Maven Surefire Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -67,6 +51,33 @@
                 </configuration>
             </plugin>
 
+            <!-- ANTLR Maven Plugin -->
+            <plugin>
+                <groupId>org.antlr</groupId>
+                <artifactId>antlr4-maven-plugin</artifactId>
+                <version>${antlr4.version}</version>
+                <executions>
+                    <execution>
+                        <id>markdown</id>
+                        <goals>
+                            <goal>antlr4</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirectory>${project.basedir}/src/main/java/org/example/code/checker/parser/markdown/parser</sourceDirectory>
+                            <outputDirectory>${project.basedir}/src/main/java/org/example/code/checker/parser/markdown/parser</outputDirectory>
+                            <includes>
+                                <include>**/*.g4</include>
+                            </includes>
+                            <packageName>org.example.code.checker.parser.markdown.parser</packageName>
+                            <visitor>true</visitor>
+                            <listener>true</listener>
+                        </configuration>
+                    </execution>
+                    <!-- 按需继续添加其它语言 -->
+                </executions>
+            </plugin>
+
+            <!-- Exec Maven Plugin -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>

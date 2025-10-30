@@ -2,6 +2,8 @@ parser grammar MdParser;
 
 options { tokenVocab=MdLexer; }
 
+@header { package org.example.code.checker.parser.markdown.parser; }
+
 // document := blocks separated by newlines and/or blank tokens
 document
   : (block (NEWLINE)+)* block? EOF

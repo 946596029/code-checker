@@ -9,5 +9,9 @@
 
 
 ### 清理构建产物并编译
-1. mvn clean package
-2. mvn -q exec:java
+1. 清理构建产物
+  + mvn clean package
+2. 执行主程序
+  + mvn -q exec:java
+3. 生成 antlr4 程序
+  + mvn -q antlr4-generate
