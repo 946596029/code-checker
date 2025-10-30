@@ -1,6 +1,8 @@
 package org.example.code.checker.parser.markdown.preprocess;
 
 import org.example.code.checker.parser.markdown.preprocess.rule.PreProcessRule;
+import org.example.code.checker.parser.markdown.preprocess.rule.HeaderRule;
+import org.example.code.checker.parser.markdown.preprocess.rule.IndentRule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +17,8 @@ public class PreProcessor {
         this.rawText = rawText;
         this.resultText = "";
         this.rules = new ArrayList<>();
+        this.rules.add(new HeaderRule());
+        this.rules.add(new IndentRule());
     }
 
     public void addRules(List<PreProcessRule> rules) {
