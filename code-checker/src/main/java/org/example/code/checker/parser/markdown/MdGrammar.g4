@@ -76,7 +76,7 @@ NUM         : DIGITS ;
 //WORD        : ~[ \r\n\-+*<[{(0-9]+ ;
 WORD        : [a-zA-Z_]+;
 
-LINK_TOKEN  : '[' WORD ('' WORD)* ']' '('
+//LINK_TOKEN  : '[' WORD ('' WORD)* ']' '('
 
 // Fragments
 fragment DIGITS : [0-9]+ ;

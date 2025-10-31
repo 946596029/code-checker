@@ -23,6 +23,14 @@
             <artifactId>antlr4-runtime</artifactId>
             <version>${antlr4.version}</version>
         </dependency>
+
+        <!-- 查找到一个开源实现 -->
+        <!-- common mark java -->
+        <dependency>
+            <groupId>org.commonmark</groupId>
+            <artifactId>commonmark</artifactId>
+            <version>0.22.0</version>
+        </dependency>
     </dependencies>
 
     <build>
