@@ -10,15 +10,10 @@ document
   ;
 
 block
-  : headerBlock
-  | listItem
+  : listItem
   | blankBlock
   | paragraph
-  ;
-
-// <header:n> Title text
-headerBlock
-  : HEADER inlineText?
+  | headerBlock
   ;
 
 // list items support optional leading INDENT/TAB tokens
@@ -35,6 +30,11 @@ blankBlock
 // paragraph = a line without structural markers, i.e., pure TEXT (and optional SPACE_TOK)
 paragraph
   : (SPACE_TOK)? TEXT
+  ;
+
+// <header:n> Title text
+headerBlock
+  : HEADER inlineText?
   ;
 
 // inline text = optional SPACE_TOK then TEXT (consume the rest of the line as text)

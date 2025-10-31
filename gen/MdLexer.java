@@ -1,4 +1,4 @@
-// Generated from MdLexer.g4 by ANTLR 4.13.2
+// Generated from C:/Users/Administrator/Desktop/code-checker/code-checker/src/main/java/org/example/code/checker/parser/markdown/parser/MdLexer.g4 by ANTLR 4.13.2
  package org.example.code.checker.parser.markdown.parser; 
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;

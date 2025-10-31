@@ -21,6 +21,15 @@ public class Main {
         PreProcessor preProcessor = new PreProcessor(rawMarkdown);
         String processed = preProcessor.process();
 
+        /**
+         * <header:1><space>Markdown
+         * <header:2><space>Title 2
+         *
+         * <indent:4>- list item with spaces
+         * <tab>- list item with tab
+         * Text after list
+         */
+
         System.out.println("\n=== Processed ===");
         System.out.println(processed);
 
