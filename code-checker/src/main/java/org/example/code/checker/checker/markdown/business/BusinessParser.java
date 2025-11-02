@@ -1,5 +1,6 @@
 package org.example.code.checker.checker.markdown.business;
 
+import org.example.code.checker.checker.markdown.business.domain.*;
 import org.example.code.checker.checker.markdown.business.domain.ExampleUsage;
 import org.example.code.checker.checker.markdown.business.domain.FrontMatter;
 import org.example.code.checker.checker.markdown.business.domain.Title;
@@ -9,6 +10,8 @@ import org.example.code.checker.checker.markdown.business.domain.attribute.Attri
 import org.example.code.checker.checker.markdown.business.domain.attribute.AttributeList;
 import org.example.code.checker.checker.markdown.parser.ast.MdAstNode;
 import org.example.code.checker.checker.markdown.parser.ast.MdNodeType;
+import org.example.code.checker.checker.markdown.parser.ast.SourcePosition;
+import org.example.code.checker.checker.markdown.parser.ast.SourceRange;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,6 +41,19 @@ public class BusinessParser {
         if (content != null && content.startsWith("---\n")) {
             List<String> lines = Arrays.asList(content.split("\n", -1));
             doc.frontMatter = parseFrontMatter(lines);
+            // attach approximate source: nodes before first H1
+            MdAstNode firstH1 = findFirstHeading(root, 1);
+            if (doc.frontMatter != null && firstH1 != null) {
+                List<MdAstNode> pre = new ArrayList<>();
+                List<MdAstNode> rootChildren = root.getChildren();
+                if (rootChildren != null) {
+                    for (MdAstNode c : rootChildren) {
+                        if (c == firstH1) break;
+                        pre.add(c);
+                    }
+                }
+                setSource(doc.frontMatter, pre);
+            }
         }
 
         // Title (first H1) and its following paragraph as description
@@ -47,6 +63,10 @@ public class BusinessParser {
             title.name = aggregateText(h1).trim();
             MdAstNode h1Desc = findNextSiblingOfType(h1, MdNodeType.PARAGRAPH);
             if (h1Desc != null) title.description = aggregateText(h1Desc).trim();
+            List<MdAstNode> src = new ArrayList<>();
+            src.add(h1);
+            if (h1Desc != null) src.add(h1Desc);
+            setSource(title, src);
             doc.title = title;
         }
 
@@ -57,6 +77,10 @@ public class BusinessParser {
             ex.name = aggregateText(h2Example).trim();
             MdAstNode code = findNextSiblingCodeBlock(h2Example);
             if (code != null) ex.exampleCode = code.getText();
+            List<MdAstNode> src = new ArrayList<>();
+            src.add(h2Example);
+            if (code != null) src.add(code);
+            setSource(ex, src);
             doc.exampleUsage = ex;
         }
 
@@ -69,6 +93,11 @@ public class BusinessParser {
             if (desc != null) argList.description = aggregateText(desc).trim();
             MdAstNode list = findNextSiblingOfType(h2Args, MdNodeType.LIST);
             if (list != null) argList.arguments = parseArguments(list);
+            List<MdAstNode> src = new ArrayList<>();
+            src.add(h2Args);
+            if (desc != null) src.add(desc);
+            if (list != null) src.add(list);
+            setSource(argList, src);
             doc.argumentList = argList;
         }
 
@@ -81,6 +110,11 @@ public class BusinessParser {
             if (desc != null) attrList.description = aggregateText(desc).trim();
             MdAstNode list = findNextSiblingOfType(h2Attr, MdNodeType.LIST);
             if (list != null) attrList.attributes = parseAttributes(list);
+            List<MdAstNode> src = new ArrayList<>();
+            src.add(h2Attr);
+            if (desc != null) src.add(desc);
+            if (list != null) src.add(list);
+            setSource(attrList, src);
             doc.attributeList = attrList;
         }
 
@@ -233,6 +267,10 @@ public class BusinessParser {
             a.name = name;
             a.tags = tags;
             a.description = desc;
+            // source: list item node, optionally paragraph
+            List<MdAstNode> src = new ArrayList<>();
+            src.add(li);
+            setSource(a, src);
             out.add(a);
         }
         return out;
@@ -253,9 +291,37 @@ public class BusinessParser {
             Attribute a = new Attribute();
             a.name = name;
             a.description = desc;
+            List<MdAstNode> src = new ArrayList<>();
+            src.add(li);
+            setSource(a, src);
             out.add(a);
         }
         return out;
+    }
+
+    // ---------- source attachment ----------
+    private static void setSource(Domain d, List<MdAstNode> nodes) {
+        if (d == null) return;
+        if (nodes == null) nodes = new ArrayList<>();
+        d.sourceNodes = nodes;
+        d.sourceRange = unionRange(nodes);
+    }
+
+    private static SourceRange unionRange(List<MdAstNode> nodes) {
+        if (nodes == null || nodes.isEmpty()) return null;
+        int start = Integer.MAX_VALUE;
+        int end = -1;
+        for (MdAstNode n : nodes) {
+            Integer s = n.getStartOffset();
+            Integer e = n.getEndOffset();
+            if (s != null && s >= 0 && s < start) start = s;
+            if (e != null && e >= 0 && e > end) end = e;
+        }
+        if (start == Integer.MAX_VALUE || end < 0 || end < start) return null;
+        SourcePosition sp = new SourcePosition(); sp.offset = start; sp.line = 0; sp.column = 0;
+        SourcePosition ep = new SourcePosition(); ep.offset = end; ep.line = 0; ep.column = 0;
+        SourceRange r = new SourceRange(); r.start = sp; r.end = ep;
+        return r;
     }
 
     private static MdAstNode firstChildOfType(MdAstNode node, MdNodeType type) {
