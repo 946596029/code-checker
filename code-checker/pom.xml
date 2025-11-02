@@ -23,14 +23,12 @@
             <artifactId>antlr4-runtime</artifactId>
             <version>${antlr4.version}</version>
         </dependency>
-
-        <!-- 查找到一个开源实现 -->
-        <!-- common mark java -->
+        <!-- CommonMark -->
         <dependency>
             <groupId>org.commonmark</groupId>
             <artifactId>commonmark</artifactId>
-            <version>0.22.0</version>
-        </dependency>
+            <version>0.27.0</version>
+        </dependency>            
     </dependencies>
 
     <build>
@@ -46,7 +44,6 @@
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
-            
 
             <!-- Maven Surefire Plugin -->
             <plugin>
@@ -65,22 +62,22 @@
                 <artifactId>antlr4-maven-plugin</artifactId>
                 <version>${antlr4.version}</version>
                 <executions>
-                    <execution>
-                        <id>markdown</id>
-                        <goals>
-                            <goal>antlr4</goal>
-                        </goals>
-                        <configuration>
-                            <sourceDirectory>${project.basedir}/src/main/java/org/example/code/checker/parser/markdown/parser</sourceDirectory>
-                            <outputDirectory>${project.basedir}/src/main/java/org/example/code/checker/parser/markdown/parser</outputDirectory>
-                            <includes>
-                                <include>**/*.g4</include>
-                            </includes>
-                            <packageName>org.example.code.checker.parser.markdown.parser</packageName>
-                            <visitor>true</visitor>
-                            <listener>true</listener>
-                        </configuration>
-                    </execution>
+<!--                    <execution>-->
+<!--                        <id>markdown</id>-->
+<!--                        <goals>-->
+<!--                            <goal>antlr4</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <sourceDirectory>${project.basedir}/src/main/java/org/example/code/checker/parser/markdown/parser</sourceDirectory>-->
+<!--                            <outputDirectory>${project.basedir}/src/main/java/org/example/code/checker/parser/markdown/parser</outputDirectory>-->
+<!--                            <includes>-->
+<!--                                <include>**/*.g4</include>-->
+<!--                            </includes>-->
+<!--                            <packageName>org.example.code.checker.checker.markdown.parser</packageName>-->
+<!--                            <visitor>true</visitor>-->
+<!--                            <listener>true</listener>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
                     <!-- 按需继续添加其它语言 -->
                 </executions>
             </plugin>
@@ -92,7 +89,6 @@
                 <version>3.5.0</version>
                 <configuration>
                     <mainClass>org.example.Main</mainClass>
-                    <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
         </plugins>

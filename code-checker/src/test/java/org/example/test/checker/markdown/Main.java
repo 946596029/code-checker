@@ -1,4 +1,4 @@
-package org.example;
+package org.example.test.checker.markdown;
 
 import org.example.code.checker.checker.markdown.business.BusinessParser;
 import org.example.code.checker.checker.markdown.business.BusinessParser.ParsedDoc;

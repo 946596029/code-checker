@@ -73,7 +73,7 @@ Run the main demonstration which preprocesses input, parses it, and prints a tre
 mvn --% -q -Dexec.mainClass=org.example.Main exec:java
 ```
 
-If you add a package-qualified runner (e.g., `org.example.code.checker.parser.markdown.parser.MdGrammar`),
+If you add a package-qualified runner (e.g., `org.example.code.checker.checker.markdown.parser.MdGrammar`),
 invoke it by changing `-Dexec.mainClass` accordingly.
 
 ### 7. ANTLR Generation
@@ -132,7 +132,7 @@ mvn -q compile
 
 Package names: Either add an ANTLR header in each `.g4`:
 ```
-@header { package org.example.code.checker.parser.markdown.parser; }
+@header { package org.example.code.checker.checker.markdown.parser; }
 ```
 or set `packageName` in the plugin execution when you need per-language segregation.
 

@@ -1,0 +1,109 @@
+D:\work\java\bin\java.exe -agentlib:jdwp=transport=dt_socket,address=127.0.0.1:55527,suspend=y,server=n -javaagent:C:\Users\Administrator\AppData\Local\JetBrains\IdeaIC2025.2\captureAgent\debugger-agent.jar=file:///C:/Users/Administrator/AppData/Local/Temp/capture14585124824103957767.props -Dkotlinx.coroutines.debug.enable.creation.stack.trace=false -Ddebugger.agent.enable.coroutines=true -Dkotlinx.coroutines.debug.enable.flows.stack.trace=true -Dkotlinx.coroutines.debug.enable.mutable.state.flows.stack.trace=true -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -classpath "C:\Users\Administrator\Desktop\code-checker\code-checker\target\classes;C:\Users\Administrator\.m2\repository\org\antlr\antlr4-runtime\4.13.2\antlr4-runtime-4.13.2.jar;C:\Users\Administrator\.m2\repository\org\commonmark\commonmark\0.27.0\commonmark-0.27.0.jar;D:\work\IntelliJ IDEA Community Edition 2025.2.4\lib\idea_rt.jar" org.example.code.checker.checker.markdown.CommonMarkStdAstMain
+已连接到地址为 ''127.0.0.1:55527'，传输: '套接字'' 的目标虚拟机
+DOCUMENT
+├── THEMATIC_BREAK
+├── HEADING {subcategory: "Content Delivery Network (CDN)"layout: "huaweicloud"page_title: "HuaweiCloud: huaweicloud_cdn_ip_information"description: |-Use this data source to get the IP attribution information of ...}
+│   ├── TEXT {subcategory: "Content Delivery Network (CDN)"}
+│   ├── CUSTOM
+│   ├── TEXT {layout: "huaweicloud"}
+│   ├── CUSTOM
+│   ├── TEXT {page_title: "HuaweiCloud: huaweicloud_cdn_ip_information"}
+│   ├── CUSTOM
+│   ├── TEXT {description: |-}
+│   ├── CUSTOM
+│   └── TEXT {Use this data source to get the IP attribution information of CDN nodes within HuaweiCloud.}
+├── HEADING[1] {huaweicloud_cdn_ip_information}
+│   └── TEXT {huaweicloud_cdn_ip_information}
+├── PARAGRAPH {Use this data source to get the IP attribution information of CDN nodes within HuaweiCloud.}
+│   └── TEXT {Use this data source to get the IP attribution information of CDN nodes within HuaweiCloud.}
+├── HEADING[2] {Example Usage}
+│   └── TEXT {Example Usage}
+├── CODE_BLOCK[info=hcl] {variable "ip_list_str" {}
+
+data "huaweicloud_cdn_ip_information" "test" {
+  ips = var.ip_list_str
+}
+}
+├── HEADING[2] {Argument Reference}
+│   └── TEXT {Argument Reference}
+├── PARAGRAPH {The following arguments are supported:}
+│   └── TEXT {The following arguments are supported:}
+├── LIST
+│   ├── LIST_ITEM
+│   │   └── PARAGRAPH {ips - (Required, String) Specifies the list of IP addresses to be queried.The maximum number of IPs that can be queried is 20, and multiple IPs are separated by commas (,).}
+│   │       ├── CODE {ips}
+│   │       ├── TEXT { - (Required, String) Specifies the list of IP addresses to be queried.}
+│   │       ├── CUSTOM
+│   │       ├── TEXT {The maximum number of IPs that can be queried is }
+│   │       ├── CODE {20}
+│   │       └── TEXT {, and multiple IPs are separated by commas (,).}
+│   └── LIST_ITEM
+│       └── PARAGRAPH {enterprise_project_id - (Optional, String) Specifies the ID of the enterprise project to which the resourcebelongs.}
+│           ├── CODE {enterprise_project_id}
+│           ├── TEXT { - (Optional, String) Specifies the ID of the enterprise project to which the resource}
+│           ├── CUSTOM
+│           └── TEXT {belongs.}
+├── HEADING[2] {Attribute Reference}
+│   └── TEXT {Attribute Reference}
+├── PARAGRAPH {In addition to all arguments above, the following attributes are exported:}
+│   └── TEXT {In addition to all arguments above, the following attributes are exported:}
+├── LIST
+│   ├── LIST_ITEM
+│   │   └── PARAGRAPH {id - The data source ID.}
+│   │       ├── CODE {id}
+│   │       └── TEXT { - The data source ID.}
+│   └── LIST_ITEM
+│       └── PARAGRAPH {information - The list of IP attribution information that matched filter parameters.The information structure is documented below.}
+│           ├── CODE {information}
+│           ├── TEXT { - The list of IP attribution information that matched filter parameters.}
+│           ├── CUSTOM
+│           ├── TEXT {The }
+│           ├── LINK
+│           │   └── TEXT {information}
+│           └── TEXT { structure is documented below.}
+├── PARAGRAPH {<a name="cdn_information"></a>The information block supports:}
+│   ├── HTML_INLINE {<a name="cdn_information">}
+│   ├── HTML_INLINE {</a>}
+│   ├── CUSTOM
+│   ├── TEXT {The }
+│   ├── CODE {information}
+│   └── TEXT { block supports:}
+└── LIST
+    ├── LIST_ITEM
+    │   └── PARAGRAPH {ip - The IP address to be queried.}
+    │       ├── CODE {ip}
+    │       └── TEXT { - The IP address to be queried.}
+    ├── LIST_ITEM
+    │   ├── PARAGRAPH {belongs - Whether the IP belongs to CDN nodes.}
+    │   │   ├── CODE {belongs}
+    │   │   └── TEXT { - Whether the IP belongs to CDN nodes.}
+    │   └── LIST
+    │       ├── LIST_ITEM
+    │       │   └── PARAGRAPH {true}
+    │       │       └── STRONG
+    │       │           └── TEXT {true}
+    │       └── LIST_ITEM
+    │           └── PARAGRAPH {false}
+    │               └── STRONG
+    │                   └── TEXT {false}
+    ├── LIST_ITEM
+    │   └── PARAGRAPH {region - The province where the IP is located."Unknown" indicates that the attribution is unknown.}
+    │       ├── CODE {region}
+    │       ├── TEXT { - The province where the IP is located.}
+    │       ├── CUSTOM
+    │       └── TEXT {"Unknown" indicates that the attribution is unknown.}
+    ├── LIST_ITEM
+    │   └── PARAGRAPH {isp - The ISP name.If the IP attribution is unknown, this field returns null.}
+    │       ├── CODE {isp}
+    │       ├── TEXT { - The ISP name.}
+    │       ├── CUSTOM
+    │       └── TEXT {If the IP attribution is unknown, this field returns null.}
+    └── LIST_ITEM
+        └── PARAGRAPH {platform - The platform name.If the IP attribution is unknown, this field returns null.}
+            ├── CODE {platform}
+            ├── TEXT { - The platform name.}
+            ├── CUSTOM
+            └── TEXT {If the IP attribution is unknown, this field returns null.}
+已与地址为 ''127.0.0.1:55527'，传输: '套接字'' 的目标虚拟机断开连接
+
+进程已结束，退出代码为 0
