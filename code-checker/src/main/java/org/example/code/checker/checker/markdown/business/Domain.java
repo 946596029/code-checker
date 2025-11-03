@@ -8,6 +8,7 @@ import java.util.List;
 public class Domain {
     public List<MdAstNode> sourceNodes;
     public SourceRange sourceRange;
+    public List<Domain> children;
 
     public String getRaw() {
         StringBuilder raw = new StringBuilder();

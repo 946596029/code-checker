@@ -7,6 +7,7 @@ import org.example.code.checker.checker.markdown.parser.ast.MdAstNode;
 import org.example.code.checker.checker.markdown.utils.FileUtils;
 import org.example.code.checker.checker.markdown.business.domain.arguement.Argument;
 import org.example.code.checker.checker.markdown.business.domain.attribute.Attribute;
+import org.example.code.checker.checker.markdown.utils.StdAstPrinter;
 
 public class Main {
     public static void main(String[] args) {
@@ -15,7 +16,7 @@ public class Main {
             filePath = args[0];
         } else {
             // Default path for convenience; can be overridden by CLI arg
-            filePath = "C:\\Users\\Administrator\\Desktop\\cdn_ip_information.md";
+            filePath = "C:\\Users\\Administrator\\Desktop\\code-checker\\code-checker\\src\\test\\java\\org\\example\\test\\checker\\markdown\\resource\\huaweicloud_cdn_ip_information.md";
         }
 
         try {
@@ -23,6 +24,8 @@ public class Main {
             MdAstNode root = MdAstGenerator.generateStandardAst(md, filePath);
 
             ParsedDoc doc = BusinessParser.parse(root);
+
+            StdAstPrinter.print(root);
 
             System.out.println("=== Title ===");
             if (doc.title != null) {

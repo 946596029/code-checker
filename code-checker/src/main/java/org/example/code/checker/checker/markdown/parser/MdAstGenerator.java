@@ -7,8 +7,6 @@ import org.commonmark.node.*;
 import org.example.code.checker.checker.markdown.parser.ast.MdAstNode;
 import org.example.code.checker.checker.markdown.parser.ast.MdNodeType;
 import org.commonmark.parser.IncludeSourceSpans;
-//import org.commonmark.ext.source.pos.SourcePosExtension;
-//import org.commonmark.ext.source.pos.SourceSpan;
 import java.util.List;
 
 public class MdAstGenerator {
@@ -59,7 +57,7 @@ public class MdAstGenerator {
             int start = Integer.MAX_VALUE;
             int end = -1;
             for (SourceSpan span : spans) {
-                int s = span.getInputIndex();
+                int s = span.getLineIndex();
                 int e = s + span.getLength();
                 if (s < start) start = s;
                 if (e > end) end = e;
