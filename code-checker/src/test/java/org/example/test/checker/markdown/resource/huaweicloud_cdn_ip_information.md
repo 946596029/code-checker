@@ -102,9 +102,9 @@ The `key_transform` block supports:
 
 * `type` - (Required, String) Specifies the type of transform rule.  
   The valid values are as follows:
-    + **ORIGINAL**: passthrough variable.
-    + **CONSTANT**: pass constant to target.
-    + **VARIABLE**: pass variable to target.
+  + **ORIGINAL**: passthrough variable.
+  + **CONSTANT**: pass constant to target.
+  + **VARIABLE**: pass variable to target.
 
 * `value` - (Optional, String) Specifies the value of the transform rule.
 

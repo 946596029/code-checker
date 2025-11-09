@@ -11,6 +11,7 @@
     划分两层
         基础的Markdown层
         具体的业务层
+            具体的业务层平铺，无父子关系
     同时改写 BusinessParser
     
     领域模型实现的问题
@@ -27,4 +28,13 @@
     可以细化领域对象到行级别以方便校验器使用
 4. 编写领域模型检查规则
 
+
+今天要做的事情
+    1. 写完 Markdown 层 Domain
+        完成
+    2. 写完 Business 层 Domain
+    3. 写完 AST => Markdown Domain => Business Domain 的转换
+        AST Tree => Markdown Domain Tree    
+            需要验证
+    4. 编写第一个 Markdown 的检查规则
 
