@@ -11,11 +11,7 @@ public class Feature implements Section {
     private SourceRange range;
 
     @Override
-    public SourceRange getRange() {
-//        if (range != null) return range;
-//        this.range = unionRange(sectionList);
-        return this.range;
-    }
+    public SourceRange getRange() { return range; }
 
     public void setRange(SourceRange range) {
         this.range = range;

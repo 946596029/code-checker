@@ -20,7 +20,7 @@ public final class Document implements StdBlock {
 		if (children == null || children.isEmpty()) {
 			this.children = Collections.emptyList();
 		} else {
-			this.children = Collections.unmodifiableList(new ArrayList<>(children));
+			this.children = List.copyOf(children);
 		}
 	}
 

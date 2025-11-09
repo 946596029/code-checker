@@ -3,6 +3,7 @@ package org.example.code.checker.checker.markdown.domain.business.section.argume
 import org.example.code.checker.checker.markdown.domain.business.Section;
 import org.example.code.checker.checker.markdown.domain.standard.StdBlock;
 import org.example.code.checker.checker.markdown.domain.standard.block.Heading;
+import org.example.code.checker.checker.markdown.domain.standard.block.Paragraph;
 import org.example.code.checker.checker.markdown.parser.ast.SourceRange;
 
 import java.util.List;
@@ -10,17 +11,12 @@ import java.util.List;
 public class Arguments implements Section {
     
     private Heading heading;
+    private Paragraph description;
     private List<StdBlock> stdBlockList;
     private SourceRange range;
 
     @Override
-    public SourceRange getRange() {
-//        if (range != null) return range;
-//        SourceRange hRange = heading != null ? heading.getRange() : null;
-//        SourceRange bRange = unionRange(stdBlockList);
-//        this.range = union(hRange, bRange);
-        return this.range;
-    }
+    public SourceRange getRange() { return range; }
 
     public void setRange(SourceRange range) {
         this.range = range;

@@ -173,8 +173,7 @@ public final class MarkdownDomainBuilder {
 					// For unexpected inline nodes, aggregate as text
 					SourceRange r = rangeOf(c);
 					String text = aggregateText(c);
-					if (text == null) text = "";
-					out.add(new Text(text, r == null ? new SourceRange() : r));
+                    out.add(new Text(text, r == null ? new SourceRange() : r));
 				}
 			}
 		}
@@ -203,7 +202,7 @@ public final class MarkdownDomainBuilder {
 		if (nl >= 0) line = raw.substring(0, nl);
 		int i = 0;
 		while (i < line.length() && line.charAt(i) == '#') i++;
-		return i > 0 ? i : 0;
+		return i;
 	}
 
 	private static String detectFencedInfo(String raw) {
@@ -224,9 +223,8 @@ public final class MarkdownDomainBuilder {
 		for (int i = 0; i < raw.length(); i++) {
 			char c = raw.charAt(i);
 			if (Character.isWhitespace(c)) continue;
-			if (Character.isDigit(c)) return true;
-			return false;
-		}
+            return Character.isDigit(c);
+        }
 		return false;
 	}
 
@@ -269,7 +267,7 @@ public final class MarkdownDomainBuilder {
 			if (start == null || s < start) start = s;
 			if (end == null || e > end) end = e;
 		}
-		if (start == null || end == null) return null;
+		if (start == null) return null;
 		SourcePosition sp = new SourcePosition();
 		sp.offset = start; sp.line = 0; sp.column = 0;
 		SourcePosition ep = new SourcePosition();

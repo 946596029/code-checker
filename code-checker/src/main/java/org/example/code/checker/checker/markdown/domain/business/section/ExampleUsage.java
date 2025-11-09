@@ -14,13 +14,7 @@ public class ExampleUsage implements Section {
     private SourceRange range;
 
     @Override
-    public SourceRange getRange() {
-//        if (range != null) return range;
-//        SourceRange hRange = heading != null ? heading.getRange() : null;
-//        SourceRange bRange = unionRange(stdBlockList);
-//        this.range = union(hRange, bRange);
-        return this.range;
-    }
+    public SourceRange getRange() { return range; }
 
     public void setRange(SourceRange range) {
         this.range = range;

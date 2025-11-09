@@ -30,11 +30,15 @@
 
 
 今天要做的事情
-    1. 写完 Markdown 层 Domain
-        完成
-    2. 写完 Business 层 Domain
-    3. 写完 AST => Markdown Domain => Business Domain 的转换
-        AST Tree => Markdown Domain Tree    
-            需要验证
-    4. 编写第一个 Markdown 的检查规则
+    1. 写完 Business 层 Domain
+        需要 MarkdownDomainBuilder 生成的 Domain 树是可进行遍历的
+            StdBlock
+            StdInline
+            Section
+            添加一个 walker 用于 Markdown Domain 的遍历
+        并需要一个用于寻找节点的工具类
+            现在的时间已经不够写一个完备的工具类了，只需要编写要用的就可以了
+        编写的 Business Domain 内容由 Markdown Domain 组装
+            并不直接按照业务粒度来组装，业务粒度分析在规则中进行分析
+    2. 编写第一个 Markdown 的检查规则
 
