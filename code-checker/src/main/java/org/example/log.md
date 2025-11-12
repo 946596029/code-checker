@@ -37,7 +37,8 @@
             Section
             添加一个 walker 用于 Markdown Domain 的遍历
         并需要一个用于寻找节点的工具类
-            现在的时间已经不够写一个完备的工具类了，只需要编写要用的就可以了
+            添加 walker 来支持 standard domain 遍历
+            对 standard domain 进行标准化，使其支持遍历
         编写的 Business Domain 内容由 Markdown Domain 组装
             并不直接按照业务粒度来组装，业务粒度分析在规则中进行分析
     2. 编写第一个 Markdown 的检查规则

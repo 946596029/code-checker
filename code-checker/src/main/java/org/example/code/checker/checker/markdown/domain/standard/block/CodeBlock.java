@@ -2,24 +2,30 @@ package org.example.code.checker.checker.markdown.domain.standard.block;
 
 import java.util.Objects;
 import java.util.Optional;
-import org.example.code.checker.checker.markdown.domain.standard.StdBlock;
+
+import org.example.code.checker.checker.markdown.domain.StdNode;
+import org.example.code.checker.checker.markdown.domain.standard.StandardNodeType;
 import org.example.code.checker.checker.markdown.parser.ast.SourceRange;
 
 /**
  * Code block (fenced or indented). Language is optional.
  */
-public final class CodeBlock implements StdBlock {
+public final class CodeBlock extends StdNode {
 	private final String content;
 	private final String language;
-	private final SourceRange range;
 
-	public CodeBlock(String content, String language, SourceRange range) {
-		Objects.requireNonNull(content, "content");
-		Objects.requireNonNull(range, "range");
-		this.content = content;
-		this.language = language;
-		this.range = range;
-	}
+    public CodeBlock(
+        String nodeId,
+        SourceRange range,
+        String parentId,
+        String content,
+        String language
+    ) {
+        super(nodeId, range, StandardNodeType.CODE_BLOCK, parentId, null);
+        Objects.requireNonNull(content, "content");
+        this.content = content;
+        this.language = language;
+    }
 
 	public String getContent() {
 		return content;
@@ -27,11 +33,6 @@ public final class CodeBlock implements StdBlock {
 
 	public Optional<String> getLanguage() {
 		return Optional.ofNullable(language);
-	}
-
-	@Override
-	public SourceRange getRange() {
-		return range;
 	}
 }
 

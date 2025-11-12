@@ -1,6 +1,6 @@
 package org.example.test.checker.markdown.domain;
 
-import org.example.code.checker.checker.markdown.domain.standard.MarkdownDomainBuilder;
+import org.example.code.checker.checker.markdown.domain.builder.standard.MarkdownDomainBuilder;
 import org.example.code.checker.checker.markdown.domain.standard.StdBlock;
 import org.example.code.checker.checker.markdown.domain.standard.StdInline;
 import org.example.code.checker.checker.markdown.domain.standard.block.BlockQuote;

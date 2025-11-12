@@ -1,30 +1,27 @@
 package org.example.code.checker.checker.markdown.domain.standard.inline;
 
-import java.util.Objects;
-import org.example.code.checker.checker.markdown.domain.standard.StdInline;
+import org.example.code.checker.checker.markdown.domain.StdNode;
+import org.example.code.checker.checker.markdown.domain.standard.StandardNodeType;
 import org.example.code.checker.checker.markdown.parser.ast.SourceRange;
 
 /**
  * Inline code span.
  */
-public final class CodeSpan implements StdInline {
+public final class CodeSpan extends StdNode {
 	private final String code;
-	private final SourceRange range;
 
-	public CodeSpan(String code, SourceRange range) {
-		Objects.requireNonNull(code, "code");
-		Objects.requireNonNull(range, "range");
-		this.code = code;
-		this.range = range;
-	}
+    public CodeSpan(
+        String nodeId,
+        SourceRange range,
+        String parentId,
+        String code
+    ) {
+        super(nodeId, range, StandardNodeType.CODE_SPAN, parentId, null);
+        this.code = code;
+    }
 
 	public String getCode() {
 		return code;
-	}
-
-	@Override
-	public SourceRange getRange() {
-		return range;
 	}
 }
 

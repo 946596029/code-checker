@@ -1,36 +1,28 @@
 package org.example.code.checker.checker.markdown.domain.standard.block;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-import org.example.code.checker.checker.markdown.domain.standard.StdBlock;
+
+import org.example.code.checker.checker.markdown.domain.StdNode;
+import org.example.code.checker.checker.markdown.domain.standard.StandardNodeType;
+import org.example.code.checker.checker.markdown.parser.ast.MdAstNode;
+import org.example.code.checker.checker.markdown.parser.ast.MdNodeType;
 import org.example.code.checker.checker.markdown.parser.ast.SourceRange;
 
 /**
  * Root document node, containing a list of block-level children.
  */
-public final class Document implements StdBlock {
-	private final List<StdBlock> children;
-	private final SourceRange range;
+public final class Document extends StdNode {
 
-	public Document(List<StdBlock> children, SourceRange range) {
-		Objects.requireNonNull(range, "range");
-		this.range = range;
-		if (children == null || children.isEmpty()) {
-			this.children = Collections.emptyList();
-		} else {
-			this.children = List.copyOf(children);
-		}
-	}
+    public Document(String nodeId) {
+        super(nodeId, null, StandardNodeType.DOCUMENT, null, null);
+    }
 
-	public List<StdBlock> getChildren() {
-		return children;
-	}
-
-	@Override
-	public SourceRange getRange() {
-		return range;
+	public Document(
+        String nodeId,
+        SourceRange range,
+        List<StdNode> children
+    ) {
+        super(nodeId, range, StandardNodeType.DOCUMENT, null, children);
 	}
 }
 

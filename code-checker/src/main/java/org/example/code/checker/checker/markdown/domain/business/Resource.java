@@ -5,7 +5,7 @@ import org.example.code.checker.checker.markdown.parser.ast.SourceRange;
 import java.util.List;
 import java.util.Objects;
 
-public class Feature implements Section {
+public class Resource implements Section {
 
     private List<Section> sectionList;
     private SourceRange range;
