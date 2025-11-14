@@ -1,8 +1,8 @@
 package org.example.test.checker.markdown.domain;
 
+import org.example.code.checker.checker.markdown.domain.StdNode;
 import org.example.code.checker.checker.markdown.domain.builder.standard.MarkdownDomainBuilder;
-import org.example.code.checker.checker.markdown.domain.standard.StdBlock;
-import org.example.code.checker.checker.markdown.domain.standard.StdInline;
+import org.example.code.checker.checker.markdown.domain.standard.StandardNodeType;
 import org.example.code.checker.checker.markdown.domain.standard.block.BlockQuote;
 import org.example.code.checker.checker.markdown.domain.standard.block.CodeBlock;
 import org.example.code.checker.checker.markdown.domain.standard.block.Document;
@@ -55,38 +55,40 @@ public class MarkdownDomainBuilderMain {
 
 	private static void printDocument(Document document) {
 		System.out.println("Document:");
-		List<StdBlock> children = document.getChildren();
-		for (StdBlock child : children) {
+		List<StdNode> children = document.getChildren();
+		for (StdNode child : children) {
 			printBlock(child, 1);
 		}
 	}
 
-	private static void printBlock(StdBlock block, int indent) {
+	private static void printBlock(StdNode block, int indent) {
 		if (block instanceof Heading) {
 			Heading h = (Heading) block;
-			System.out.println(indent(indent) + "Heading(level=" + h.getLevel() + "): " + inlineText(h.getInlines()));
+			System.out.println(indent(indent) + "Heading(level=" + h.getLevel() + "): " + inlineText(h.getChildren()));
 			return;
 		}
 		if (block instanceof Paragraph) {
 			Paragraph p = (Paragraph) block;
-			System.out.println(indent(indent) + "Paragraph: " + inlineText(p.getInlines()));
+			System.out.println(indent(indent) + "Paragraph: " + inlineText(p.getChildren()));
 			return;
 		}
 		if (block instanceof ListBlock) {
 			ListBlock lb = (ListBlock) block;
 			System.out.println(indent(indent) + "ListBlock(ordered=" + lb.isOrdered() + ", start=" + lb.getStartNumber() + "):");
-			for (ListItem item : lb.getItems()) {
-				System.out.println(indent(indent + 1) + "ListItem:");
-				for (StdBlock child : item.getChildren()) {
-					printBlock(child, indent + 2);
-				}
+			for (StdNode item : lb.getChildren()) {
+                if (StandardNodeType.LIST_ITEM == item.getNodeType()) {
+                    System.out.println(indent(indent + 1) + "ListItem:");
+                    for (StdNode child : item.getChildren()) {
+                        printBlock(child, indent + 2);
+                    }
+                }
 			}
 			return;
 		}
 		if (block instanceof BlockQuote) {
 			BlockQuote bq = (BlockQuote) block;
 			System.out.println(indent(indent) + "BlockQuote:");
-			for (StdBlock child : bq.getChildren()) {
+			for (StdNode child : bq.getChildren()) {
 				printBlock(child, indent + 1);
 			}
 			return;
@@ -109,9 +111,9 @@ public class MarkdownDomainBuilderMain {
 		System.out.println(indent(indent) + block.getClass().getSimpleName());
 	}
 
-	private static String inlineText(List<StdInline> inlines) {
+	private static String inlineText(List<StdNode> inlines) {
 		StringBuilder sb = new StringBuilder();
-		for (StdInline in : inlines) {
+		for (StdNode in : inlines) {
 			if (in instanceof Text) {
 				sb.append(((Text) in).getContent());
 			} else if (in instanceof CodeSpan) {

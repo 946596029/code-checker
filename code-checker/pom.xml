@@ -28,7 +28,26 @@
             <groupId>org.commonmark</groupId>
             <artifactId>commonmark</artifactId>
             <version>0.27.0</version>
-        </dependency>            
+        </dependency>
+
+        <!-- Graph Structure Manage -->
+        <dependency>
+            <groupId>org.jgrapht</groupId>
+            <artifactId>jgrapht-core</artifactId>
+            <version>1.5.2</version>
+        </dependency>
+        <!-- JGraphT IO Support -->
+        <dependency>
+            <groupId>org.jgrapht</groupId>
+            <artifactId>jgrapht-io</artifactId>
+            <version>1.5.2</version>
+        </dependency>
+        <!-- Graphviz Render -->
+        <dependency>
+            <groupId>guru.nidi</groupId>
+            <artifactId>graphviz-java</artifactId>
+            <version>0.18.1</version>
+        </dependency>
     </dependencies>
 
     <build>
