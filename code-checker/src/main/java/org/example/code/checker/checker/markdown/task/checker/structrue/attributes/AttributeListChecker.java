@@ -50,6 +50,7 @@ public class AttributeListChecker extends TaskNode {
             TaskDataUtils.getPayload(input, "document", Document.class);
         String fileId = TaskDataUtils.getPayload(input, "fileId", String.class);
 
+        // param document is null
         if (document == null) {
             CheckError error = new CheckError(
                 "Attributes.DocumentMissing",
@@ -68,6 +69,12 @@ public class AttributeListChecker extends TaskNode {
             );
         }
 
+        /**
+         * fixme 这里的搜寻逻辑不对
+         * 搜寻逻辑应该是找到下一个标题的位置，当前标题到下一个标题中间的所有内容都是当前标题的内容
+         */
+
+        // find title block
         Heading sectionHeading = findSectionHeading(document, EXPECTED_HEADING_TEXT);
         if (sectionHeading == null) {
             CheckError error = new CheckError(
