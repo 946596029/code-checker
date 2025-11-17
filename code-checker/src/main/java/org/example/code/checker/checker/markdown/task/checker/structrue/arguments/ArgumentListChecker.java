@@ -1,6 +1,6 @@
-package org.example.code.checker.checker.markdown.task.checker.structrue.attributes;
+package org.example.code.checker.checker.markdown.task.checker.structrue.arguments;
 
-import org.example.code.checker.checker.CheckError;
+import org.example.code.checker.checker.common.CheckError;
 import org.example.code.checker.checker.markdown.domain.StdNode;
 import org.example.code.checker.checker.markdown.domain.standard.StandardNodeType;
 import org.example.code.checker.checker.markdown.domain.standard.block.Document;
@@ -19,26 +19,26 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Check "Attributes" section structure and return parsed {@link AttributesInfo}
+ * Check "Arguments" section structure and return parsed {@link ArgumentList}
  * when it is structurally complete.
  * <p>
  * Rules (structure only):
  * <ul>
- *     <li>Document must contain a level-2 heading whose text is exactly
- *     {@code "Attribute Reference"}.</li>
- *     <li>The first non-empty paragraph after that heading is treated as the
- *     section description and must be present.</li>
- *     <li>All list items (bullet or ordered) between the description paragraph
- *     and the next heading of level &lt;= 2 are collected as attribute entries.
- *     The list itself may be empty.</li>
+ * <li>Document must contain a level-2 heading whose text is exactly
+ * {@code "Argument Reference"}.</li>
+ * <li>The first non-empty paragraph after that heading is treated as the
+ * section description and must be present.</li>
+ * <li>All list items (bullet or ordered) between the description paragraph
+ * and the next heading of level &lt;= 2 are collected as argument entries.
+ * The list itself may be empty.</li>
  * </ul>
  * <p>
- * On success this task returns {@code TaskData<AttributesInfo>}.
+ * On success this task returns {@code TaskData<ArgumentsInfo>}.
  * On failure it returns {@code TaskData<CheckError>} describing the problem.
  */
-public class AttributesChecker extends TaskNode {
+public class ArgumentListChecker extends TaskNode {
 
-    private static final String EXPECTED_HEADING_TEXT = "Attribute Reference";
+    private static final String EXPECTED_HEADING_TEXT = "Argument Reference";
 
     @Override
     public TaskData<?> task(Map<String, TaskData<?>> input) {
@@ -46,23 +46,22 @@ public class AttributesChecker extends TaskNode {
             throw new IllegalArgumentException("input is null or empty");
         }
 
-        Document document =
-            TaskDataUtils.getPayload(input, "document", Document.class);
+        Document document = TaskDataUtils.getPayload(input, "document", Document.class);
         String fileId = TaskDataUtils.getPayload(input, "fileId", String.class);
 
         if (document == null) {
             CheckError error = new CheckError(
-                "Attributes.DocumentMissing",
+                "Arguments.DocumentMissing",
                 "Document domain node is missing in input",
                 CheckError.Severity.ERROR,
                 fileId,
                 null,
                 null,
-                "Attributes"
+                "Arguments"
             );
             return new TaskData<>(
                 CheckError.class,
-                AttributesChecker.class.getSimpleName(),
+                    ArgumentListChecker.class.getSimpleName(),
                 System.currentTimeMillis(),
                 error
             );
@@ -71,17 +70,17 @@ public class AttributesChecker extends TaskNode {
         Heading sectionHeading = findSectionHeading(document, EXPECTED_HEADING_TEXT);
         if (sectionHeading == null) {
             CheckError error = new CheckError(
-                "Attributes.MissingHeading",
-                "Heading 'Attribute Reference' is missing in document",
+                "Arguments.MissingHeading",
+                "Heading 'Argument Reference' is missing in document",
                 CheckError.Severity.ERROR,
                 fileId,
                 document.getRange(),
                 document.getNodeId(),
-                "Attributes"
+                "Arguments"
             );
             return new TaskData<>(
                 CheckError.class,
-                AttributesChecker.class.getSimpleName(),
+                    ArgumentListChecker.class.getSimpleName(),
                 System.currentTimeMillis(),
                 error
             );
@@ -90,17 +89,17 @@ public class AttributesChecker extends TaskNode {
         Paragraph descParagraph = findFirstParagraphAfter(document, sectionHeading);
         if (descParagraph == null) {
             CheckError error = new CheckError(
-                "Attributes.MissingDescription",
-                "Description paragraph after 'Attribute Reference' heading is missing",
+                "Arguments.MissingDescription",
+                "Description paragraph after 'Argument Reference' heading is missing",
                 CheckError.Severity.ERROR,
                 fileId,
                 sectionHeading.getRange(),
                 sectionHeading.getNodeId(),
-                "Attributes"
+                "Arguments"
             );
             return new TaskData<>(
                 CheckError.class,
-                AttributesChecker.class.getSimpleName(),
+                    ArgumentListChecker.class.getSimpleName(),
                 System.currentTimeMillis(),
                 error
             );
@@ -109,33 +108,33 @@ public class AttributesChecker extends TaskNode {
         String descriptionText = collectInlineText(descParagraph);
         if (descriptionText == null || descriptionText.trim().isEmpty()) {
             CheckError error = new CheckError(
-                "Attributes.EmptyDescription",
-                "Description paragraph after 'Attribute Reference' heading is empty",
+                "Arguments.EmptyDescription",
+                "Description paragraph after 'Argument Reference' heading is empty",
                 CheckError.Severity.ERROR,
                 fileId,
                 descParagraph.getRange(),
                 descParagraph.getNodeId(),
-                "Attributes"
+                "Arguments"
             );
             return new TaskData<>(
                 CheckError.class,
-                AttributesChecker.class.getSimpleName(),
+                    ArgumentListChecker.class.getSimpleName(),
                 System.currentTimeMillis(),
                 error
             );
         }
 
-        List<AttributeItem> items = collectAttributeItems(document, sectionHeading, descParagraph);
+        List<Argument> items = collectArgumentItems(document, sectionHeading, descParagraph);
 
-        AttributesInfo info = new AttributesInfo(
+        ArgumentList info = new ArgumentList(
             collectInlineText(sectionHeading).trim(),
             descriptionText.trim(),
             items
         );
 
         return new TaskData<>(
-            AttributesInfo.class,
-            AttributesChecker.class.getSimpleName(),
+                ArgumentList.class,
+                ArgumentListChecker.class.getSimpleName(),
             System.currentTimeMillis(),
             info
         );
@@ -185,12 +184,12 @@ public class AttributesChecker extends TaskNode {
         return null;
     }
 
-    private List<AttributeItem> collectAttributeItems(
+    private List<Argument> collectArgumentItems(
         Document document,
         Heading heading,
         Paragraph descParagraph
     ) {
-        List<AttributeItem> items = new ArrayList<>();
+        List<Argument> items = new ArrayList<>();
         List<StdNode> children = document.getChildren();
         if (children == null || children.isEmpty()) {
             return items;
@@ -220,7 +219,7 @@ public class AttributesChecker extends TaskNode {
                         if (li instanceof ListItem) {
                             String text = collectInlineText(li);
                             if (text != null && !text.trim().isEmpty()) {
-                                AttributeItem parsed = parseAttributeItem(text.trim());
+                                Argument parsed = parseArgumentItem(text.trim());
                                 items.add(parsed);
                             }
                         }
@@ -232,9 +231,16 @@ public class AttributesChecker extends TaskNode {
         return items;
     }
 
-    private AttributeItem parseAttributeItem(String raw) {
+    private Argument parseArgumentItem(String raw) {
         if (raw == null) {
-            return new AttributeItem(null, null, new ArrayList<>(), null);
+            return new Argument(
+                null,
+                    Argument.Requirement.UNKNOWN,
+                null,
+                new ArrayList<>(),
+                null,
+                null
+            );
         }
 
         String text = raw.trim();
@@ -264,21 +270,39 @@ public class AttributesChecker extends TaskNode {
             description = text;
         }
 
+        Argument.Requirement requirement = Argument.Requirement.UNKNOWN;
+        String type = null;
         List<String> modifiers = new ArrayList<>();
+
         if (metaPart != null && !metaPart.isEmpty()) {
             String[] tokens = metaPart.split(",");
-            for (String token : tokens) {
-                String t = token.trim();
-                if (!t.isEmpty()) {
-                    modifiers.add(t);
+            for (int i = 0; i < tokens.length; i++) {
+                String token = tokens[i].trim();
+                if (token.isEmpty()) {
+                    continue;
+                }
+                if (i == 0) {
+                    if ("Required".equalsIgnoreCase(token)) {
+                        requirement = Argument.Requirement.REQUIRED;
+                    } else if ("Optional".equalsIgnoreCase(token)) {
+                        requirement = Argument.Requirement.OPTIONAL;
+                    } else {
+                        modifiers.add(token);
+                    }
+                } else if (i == 1 && type == null) {
+                    type = token;
+                } else {
+                    modifiers.add(token);
                 }
             }
         }
 
-        return new AttributeItem(
+        return new Argument(
             name,
-            description,
+            requirement,
+            type,
             modifiers,
+            description,
             raw
         );
     }

@@ -1,6 +1,6 @@
 package org.example.code.checker.checker.markdown.task.checker.structrue.title;
 
-import org.example.code.checker.checker.CheckError;
+import org.example.code.checker.checker.common.CheckError;
 import org.example.code.checker.checker.markdown.domain.StdNode;
 import org.example.code.checker.checker.markdown.domain.standard.StandardNodeType;
 import org.example.code.checker.checker.markdown.domain.standard.block.Document;

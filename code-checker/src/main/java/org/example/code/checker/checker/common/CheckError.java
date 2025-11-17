@@ -1,4 +1,4 @@
-package org.example.code.checker.checker;
+package org.example.code.checker.checker.common;
 
 import org.example.code.checker.checker.markdown.parser.ast.SourceRange;
 

@@ -1,21 +1,23 @@
-package org.example.code.checker.checker.markdown.task.checker.structrue.attributes;
+package org.example.code.checker.checker.markdown.task.checker.structrue.arguments;
+
+import org.example.code.checker.checker.markdown.domain.StdNode;
 
 import java.util.Collections;
 import java.util.List;
 
 /**
- * Parsed "Attributes" section information.
+ * Parsed "Arguments" section information.
  */
-public final class AttributesInfo {
+public final class ArgumentList {
 
     private final String heading;
     private final String description;
-    private final List<AttributeItem> items;
+    private final List<Argument> items;
 
-    public AttributesInfo(
+    public ArgumentList(
         String heading,
         String description,
-        List<AttributeItem> items
+        List<Argument> items
     ) {
         this.heading = heading;
         this.description = description;
@@ -32,13 +34,13 @@ public final class AttributesInfo {
         return description;
     }
 
-    public List<AttributeItem> getItems() {
+    public List<Argument> getItems() {
         return items;
     }
 
     @Override
     public String toString() {
-        return "AttributesInfo{"
+        return "ArgumentsInfo{"
             + "heading='" + heading + '\''
             + ", description='" + description + '\''
             + ", items=" + items

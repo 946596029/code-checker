@@ -2,9 +2,27 @@ package org.example.code.checker.checker.markdown.domain;
 
 import org.example.code.checker.checker.markdown.domain.standard.StandardNodeType;
 import org.example.code.checker.checker.markdown.parser.ast.SourceRange;
+import org.example.code.checker.checker.utils.TreeNode;
 
 import java.util.List;
 import java.util.Objects;
+
+public class MdDomain {
+    private final StandardNodeType nodeType;
+    private final boolean isBlock;
+    protected SourceRange range;
+
+    public MdDomain(StandardNodeType nodeType, boolean isBlock, SourceRange range) {
+        this.nodeType = nodeType;
+        this.isBlock = isBlock;
+        this.range = range;
+    }
+}
+
+public class MdDomainNode extends TreeNode<MdDomain> {
+
+    public MdDomainNode
+}
 
 /**
  * Base interface for all Standard domain nodes (blocks and inlines).

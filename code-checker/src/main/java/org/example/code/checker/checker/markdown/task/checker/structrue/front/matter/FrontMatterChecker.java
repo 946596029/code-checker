@@ -1,6 +1,6 @@
 package org.example.code.checker.checker.markdown.task.checker.structrue.front.matter;
 
-import org.example.code.checker.checker.CheckError;
+import org.example.code.checker.checker.common.CheckError;
 import org.example.flow.engine.node.TaskData;
 import org.example.flow.engine.node.TaskDataUtils;
 import org.example.flow.engine.node.TaskNode;

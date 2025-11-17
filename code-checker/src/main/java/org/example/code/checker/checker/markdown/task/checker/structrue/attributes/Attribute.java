@@ -1,5 +1,7 @@
 package org.example.code.checker.checker.markdown.task.checker.structrue.attributes;
 
+import org.example.code.checker.checker.markdown.domain.StdNode;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -7,17 +9,19 @@ import java.util.List;
  * Parsed single attribute definition item, typically from the
  * "Attribute Reference" section.
  */
-public final class AttributeItem {
+public final class Attribute {
 
     private final String name;
-    private final String description;
     private final List<String> modifiers;
+    private final String description;
+    private final List<StdNode> blockChildren;
     private final String raw;
 
-    public AttributeItem(
+    public Attribute(
         String name,
         String description,
         List<String> modifiers,
+        List<StdNode> blockChildren,
         String raw
     ) {
         this.name = name;
@@ -25,6 +29,9 @@ public final class AttributeItem {
         this.modifiers = modifiers == null
             ? Collections.emptyList()
             : Collections.unmodifiableList(modifiers);
+        this.blockChildren = blockChildren == null
+                ? Collections.emptyList()
+                : Collections.unmodifiableList(blockChildren);
         this.raw = raw;
     }
 
@@ -40,20 +47,13 @@ public final class AttributeItem {
         return modifiers;
     }
 
+    public List<StdNode> getBlockChildren() { return blockChildren; }
+
     /**
      * The full, flattened text of the original list item, useful for debugging.
      */
     public String getRaw() {
         return raw;
-    }
-
-    @Override
-    public String toString() {
-        return "AttributeItem{"
-            + "name='" + name + '\''
-            + ", description='" + description + '\''
-            + ", modifiers=" + modifiers
-            + '}';
     }
 }
 
