@@ -1,28 +1,35 @@
 package org.example.code.checker.checker.markdown.domain.standard.inline;
 
+import org.example.code.checker.checker.markdown.domain.MdDomain;
+import org.example.code.checker.checker.markdown.domain.MdDomainVisitor;
 import org.example.code.checker.checker.markdown.domain.StdNode;
 import org.example.code.checker.checker.markdown.domain.standard.StandardNodeType;
 import org.example.code.checker.checker.markdown.parser.ast.SourceRange;
+import org.example.code.checker.checker.utils.TreeNode;
 
 /**
  * Inline code span.
  */
-public final class CodeSpan extends StdNode {
-	private final String code;
+public class CodeSpan extends MdDomain {
+	private String code;
 
     public CodeSpan(
-        String nodeId,
+        StandardNodeType nodeType,
+        boolean isBlock,
         SourceRange range,
-        String parentId,
         String code
     ) {
-        super(nodeId, range, StandardNodeType.CODE_SPAN, parentId, null);
+        super(nodeType, isBlock, range);
         this.code = code;
+    }
+
+    @Override
+    public <R> R accept(MdDomainVisitor<R> visitor) {
+        return visitor.visit(this);
     }
 
 	public String getCode() {
 		return code;
 	}
 }
-
 

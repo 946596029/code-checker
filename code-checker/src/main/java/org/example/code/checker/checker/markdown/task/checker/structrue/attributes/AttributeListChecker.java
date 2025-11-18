@@ -40,34 +40,35 @@ public class AttributeListChecker extends TaskNode {
 
     private static final String EXPECTED_HEADING_TEXT = "Attribute Reference";
 
-    @Override
-    public TaskData<?> task(Map<String, TaskData<?>> input) {
-        if (input == null || input.isEmpty()) {
-            throw new IllegalArgumentException("input is null or empty");
-        }
-
-        Document document =
-            TaskDataUtils.getPayload(input, "document", Document.class);
-        String fileId = TaskDataUtils.getPayload(input, "fileId", String.class);
-
-        // param document is null
-        if (document == null) {
-            CheckError error = new CheckError(
-                "Attributes.DocumentMissing",
-                "Document domain node is missing in input",
+    private TaskData checkInput(Map<String, TaskData<?>> input) {
+        // fixme need implement
+        CheckError error = new CheckError(
+                "Attributes.InputParamCheck",
+                "Input param is not valid.",
                 CheckError.Severity.ERROR,
-                fileId,
+                null,
                 null,
                 null,
                 "Attributes"
-            );
-            return new TaskData<>(
-                CheckError.class,
-                    AttributeListChecker.class.getSimpleName(),
-                System.currentTimeMillis(),
-                error
-            );
+        );
+        return new TaskData<>(
+            CheckError.class,
+            AttributeListChecker.class.getSimpleName(),
+            System.currentTimeMillis(),
+            error
+        );
+    }
+
+    @Override
+    public TaskData<?> task(Map<String, TaskData<?>> input) {
+
+        TaskData<?> output = checkInput(input);
+        if (output != null) {
+            return output;
         }
+
+        Document document = TaskDataUtils.getPayload(input, "document", Document.class);
+        String fileId = TaskDataUtils.getPayload(input, "fileId", String.class);
 
         /**
          * fixme 这里的搜寻逻辑不对
