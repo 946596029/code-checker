@@ -1,29 +1,30 @@
 package org.example.code.checker.checker.markdown.domain.standard.block;
 
-import java.util.List;
-
-import org.example.code.checker.checker.markdown.domain.StdNode;
+import org.example.code.checker.checker.markdown.domain.MdDomain;
 import org.example.code.checker.checker.markdown.domain.standard.StandardNodeType;
-import org.example.code.checker.checker.markdown.parser.ast.MdAstNode;
-import org.example.code.checker.checker.markdown.parser.ast.MdNodeType;
 import org.example.code.checker.checker.markdown.parser.ast.SourceRange;
 
 /**
  * Root document node, containing a list of block-level children.
  */
-public final class Document extends StdNode {
+public class Document extends MdDomain {
 
-    public Document(String nodeId) {
-        super(nodeId, null, StandardNodeType.DOCUMENT, null, null);
+    public Document(SourceRange range) {
+        super(StandardNodeType.DOCUMENT, true, range);
     }
 
-	public Document(
-        String nodeId,
-        SourceRange range,
-        List<StdNode> children
-    ) {
-        super(nodeId, range, StandardNodeType.DOCUMENT, null, children);
-	}
+    public static class Builder {
+        private SourceRange range;
+
+        public Builder range(SourceRange range) {
+            this.range = range;
+            return this;
+        }
+
+        public Document build() {
+            return new Document(range);
+        }
+    }
 }
 
 

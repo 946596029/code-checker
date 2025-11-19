@@ -1,32 +1,22 @@
 package org.example.code.checker.checker.markdown.domain.standard.inline;
 
-import java.util.List;
 import java.util.Optional;
 
-import org.example.code.checker.checker.markdown.domain.StdNode;
+import org.example.code.checker.checker.markdown.domain.MdDomain;
 import org.example.code.checker.checker.markdown.domain.standard.StandardNodeType;
 import org.example.code.checker.checker.markdown.parser.ast.SourceRange;
 
 /**
  * Image inline node. Alt text is represented by child inlines.
  */
-public final class Image extends StdNode {
+public class Image extends MdDomain {
     private final String title;
     private final String destination;
-	private final List<StdNode> alt;
 
-    public Image(
-        String nodeId,
-        SourceRange range,
-        String parentId,
-        String title,
-        String destination,
-        List<StdNode> alt
-    ) {
-        super(nodeId, range, StandardNodeType.IMAGE, parentId, null);
+    public Image(SourceRange range, String title, String destination) {
+        super(StandardNodeType.IMAGE, false, range);
         this.title = title;
         this.destination = destination;
-        this.alt = alt;
     }
 
 	public String getDestination() {
@@ -37,7 +27,28 @@ public final class Image extends StdNode {
 		return Optional.ofNullable(title);
 	}
 
-	public List<StdNode> getAlt() {
-		return alt;
-	}
+    public static class Builder {
+        private SourceRange range;
+        private String title;
+        private String destination;
+
+        public Builder range(SourceRange range) {
+            this.range = range;
+            return this;
+        }
+
+        public Builder title(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public Builder destination(String destination) {
+            this.destination = destination;
+            return this;
+        }
+
+        public Image build() {
+            return new Image(range, title, destination);
+        }
+    }
 }

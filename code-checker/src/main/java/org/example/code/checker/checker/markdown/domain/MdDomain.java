@@ -9,8 +9,6 @@ public abstract class MdDomain {
     private boolean isBlock;
     private SourceRange range;
 
-    public abstract <R> R accept(MdDomainVisitor<R> visitor);
-
     public MdDomain(
         StandardNodeType nodeType,
         boolean isBlock,

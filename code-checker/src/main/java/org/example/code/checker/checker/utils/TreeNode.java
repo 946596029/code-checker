@@ -1,6 +1,7 @@
 package org.example.code.checker.checker.utils;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class TreeNode<T> {
@@ -36,20 +37,22 @@ public class TreeNode<T> {
         return children;
     }
 
-    public void setChildren(List<TreeNode<T>> children) {
-        this.children = children;
-    }
-
     public void addChild(TreeNode<T> child) {
         if (children == null) {
             children = new ArrayList<>();
         }
+        child.parent = this;
+        child.depth = this.getDepth() + 1;
+        child.indexInParent = this.getChildCount();
         children.add(child);
     }
 
     public boolean removeChild(TreeNode<T> child) {
         if (children.contains(child)) {
             children.remove(child);
+            for (int i=0; i<this.children.size(); i++) {
+                children.get(i).indexInParent = i;
+            }
             return true;
         }
         return false;
@@ -61,13 +64,19 @@ public class TreeNode<T> {
 
     // property operation
 
+    public void setData(T data) {
+        this.data = data;
+    }
+
     public T getData() {
         return data;
     }
 
-    public void setData(T data) {
-        this.data = data;
+    public int getDepth() {
+        return depth;
     }
+
+    public int getIndexInParent() { return indexInParent; }
 
     public boolean isRoot() {
         return this.parent == null;
@@ -77,44 +86,93 @@ public class TreeNode<T> {
         return this.children == null || this.children.isEmpty();
     }
 
-    public int getDepth() {
-        return depth;
+    /**
+     * ✅ 开始构建查询
+     */
+    public Query<T> query() {
+        return new Query<T>(this);
     }
 
-    public static <T> List<TreeNode<T>> findAll(TreeNode<T> root, Predicate<TreeNode<T>> condition) {
-        List<TreeNode<T>> result = new ArrayList<>();
-        Deque<TreeNode<T>> waitQueue = new LinkedList<>();
-        waitQueue.add(root);
-        while (!waitQueue.isEmpty()) {
-            int len = waitQueue.size();
-            for (int i=0; i<len; i++) {
-                TreeNode<T> node = waitQueue.pop();
-                if (condition.test(node)) {
-                    result.add(node);
-                }
-                for (TreeNode<T> child : node.getChildren()) {
-                    waitQueue.push(child);
-                }
-            }
+    /**
+     * ✅ 查询构建器（链式调用）
+     */
+    public static class Query<T> {
+        private final TreeNode<T> root;
+        private List<TreeNode<T>> results = new ArrayList<>();
+
+        private Query(TreeNode<T> root) {
+            this.root = root;
         }
-        return result;
+
+        /**
+         * ✅ 递归查询所有节点
+         */
+        public Query<T> all() {
+            results.clear();
+            root.traverse(results::add); // 收集所有节点
+            return this;
+        }
+
+        /**
+         * ✅ 只查直接子节点
+         */
+        public Query<T> children() {
+            results = new ArrayList<>(root.getChildren());
+            return this;
+        }
+
+        /**
+         * ✅ 按类型过滤（核心！）
+         * 示例：.ofType(Heading.class)
+         */
+        public <C extends T> Query<T> ofType(Class<C> type) {
+            results.removeIf(node -> !type.isInstance(node.getData()));
+            return this;
+        }
+
+        /**
+         * ✅ 按条件过滤（Lambda 中直接访问具体类型）
+         * 示例：.filter(Heading.class, h -> h.getLevel() == 1)
+         */
+        public <C extends T> Query<T> filter(Class<C> type, Predicate<C> condition) {
+            results.removeIf(node -> {
+                if (!type.isInstance(node.getData()))
+                    return true;
+                C concrete = type.cast(node.getData());
+                return !condition.test(concrete); // 测试具体类型属性
+            });
+            return this;
+        }
+
+        /**
+         * ✅ 取第一个结果
+         */
+        public Optional<TreeNode<T>> first() {
+            return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
+        }
+
+        /**
+         * ✅ 取所有结果
+         */
+        public List<TreeNode<T>> list() {
+            return new ArrayList<>(results);
+        }
+
+        /**
+         * ✅ 遍历结果
+         */
+        public void forEach(Consumer<TreeNode<T>> action) {
+            results.forEach(action);
+        }
     }
 
-    public static <T> Optional<TreeNode<T>> findFirst(TreeNode<T> root, Predicate<TreeNode<T>> condition) {
-        if (root == null || condition == null) {
-            return null;
+    /**
+     * ✅ 遍历辅助方法
+     */
+    private void traverse(Consumer<TreeNode<T>> action) {
+        action.accept(this);
+        for (TreeNode<T> child : this.children) {
+            child.traverse(action);
         }
-        if (condition.test(root)) {
-            return Optional.of(root);
-        }
-        if (root.getChildren() != null) {
-            for (TreeNode<T> child : root.getChildren()) {
-                Optional<TreeNode<T>> result = findFirst(child, condition);
-                if (!result.isEmpty()) {
-                    return result;
-                }
-            }
-        }
-        return null;
     }
 }

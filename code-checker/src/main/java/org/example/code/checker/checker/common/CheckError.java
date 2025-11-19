@@ -102,6 +102,70 @@ public final class CheckError {
     public String getNodeType() {
         return nodeType;
     }
+
+    /**
+     * Builder for {@link CheckError} to simplify creation of error objects.
+     */
+    public static class Builder {
+        private String ruleId;
+        private String message;
+        private Severity severity = Severity.ERROR; // 默认严重级别为 ERROR
+        private String fileId;
+        private SourceRange range;
+        private String nodeId;
+        private String nodeType;
+
+        public Builder ruleId(String ruleId) {
+            this.ruleId = ruleId;
+            return this;
+        }
+
+        public Builder message(String message) {
+            this.message = message;
+            return this;
+        }
+
+        public Builder severity(Severity severity) {
+            this.severity = severity;
+            return this;
+        }
+
+        public Builder fileId(String fileId) {
+            this.fileId = fileId;
+            return this;
+        }
+
+        public Builder range(SourceRange range) {
+            this.range = range;
+            return this;
+        }
+
+        public Builder nodeId(String nodeId) {
+            this.nodeId = nodeId;
+            return this;
+        }
+
+        public Builder nodeType(String nodeType) {
+            this.nodeType = nodeType;
+            return this;
+        }
+
+        public CheckError build() {
+            return new CheckError(
+                    ruleId,
+                    message,
+                    severity,
+                    fileId,
+                    range,
+                    nodeId,
+                    nodeType);
+        }
+    }
+
+    // 添加静态 builder() 方法
+    public static Builder builder() {
+        return new Builder();
+    }
 }
 
 

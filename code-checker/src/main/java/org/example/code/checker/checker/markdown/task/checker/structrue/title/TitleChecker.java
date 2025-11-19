@@ -1,6 +1,7 @@
 package org.example.code.checker.checker.markdown.task.checker.structrue.title;
 
 import org.example.code.checker.checker.common.CheckError;
+import org.example.code.checker.checker.markdown.domain.MdDomain;
 import org.example.code.checker.checker.markdown.domain.StdNode;
 import org.example.code.checker.checker.markdown.domain.standard.StandardNodeType;
 import org.example.code.checker.checker.markdown.domain.standard.block.Document;
@@ -8,6 +9,7 @@ import org.example.code.checker.checker.markdown.domain.standard.block.Heading;
 import org.example.code.checker.checker.markdown.domain.standard.block.Paragraph;
 import org.example.code.checker.checker.markdown.domain.standard.inline.CodeSpan;
 import org.example.code.checker.checker.markdown.domain.standard.inline.Text;
+import org.example.code.checker.checker.utils.TreeNode;
 import org.example.flow.engine.node.TaskData;
 import org.example.flow.engine.node.TaskDataUtils;
 import org.example.flow.engine.node.TaskNode;
@@ -15,6 +17,7 @@ import org.example.flow.engine.node.TaskNode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Check title structure and completeness based on {@link Document} domain node.
@@ -31,33 +34,79 @@ import java.util.Map;
  */
 public class TitleChecker extends TaskNode {
 
+    private TaskData<CheckError> checkInput(Map<String, TaskData<?>> input) {
+        TreeNode<MdDomain> document = TaskDataUtils.getPayload(input, "document", TreeNode.class);
+        String fileId = TaskDataUtils.getPayload(input, "fileId", String.class);
+
+        if (document == null) {
+            CheckError error = CheckError.builder()
+                    .ruleId("Title.DocumentMissing")
+                    .message("Document domain node is missing in input")
+                    .severity(CheckError.Severity.ERROR)
+                    .fileId(fileId)
+                    .range(null)
+                    .nodeId(null)
+                    .nodeType("Title")
+                    .build();
+            return new TaskData<>(
+                    CheckError.class,
+                    TitleChecker.class.getSimpleName(),
+                    System.currentTimeMillis(),
+                    error
+            );
+        }
+
+        return null;
+    }
+
+    private List<TaskData<?>> checkTitleStructure(Map<String, TaskData<?>> input) {
+        List<TaskData<?>> checkList = new ArrayList<>();
+
+        TreeNode<MdDomain> document = TaskDataUtils.getPayload(input, "document", TreeNode.class);
+        String fileId = TaskDataUtils.getPayload(input, "fileId", String.class);
+
+        // 检查一级标题是否存在
+        Optional<TreeNode<MdDomain>> queryResult = document.query()
+                .filter(Heading.class, node -> node.getLevel() == 1)
+                .first();
+
+        // 检查描述是否存在
+        if (queryResult.isEmpty()) {
+            checkList.add(
+                    CheckError.builder()
+                            .ruleId("Title.H1")
+                            .message("The first H1 Heading is not exist.")
+                            .range()
+            )
+        }
+        TreeNode<MdDomain> firstH1 = queryResult.get();
+
+        // 检查下方是否有提示，可选
+        Optional<TreeNode<MdDomain>> firstH2 = document.query()
+                .filter(Heading.class, node -> node.getLevel() == 2)
+                .first();
+
+
+
+        // 获取源代码，进行格式检查
+
+        //
+    }
+
     @Override
-    public TaskData<?> task(Map<String, TaskData<?>> input) {
+    public List<TaskData<?>> task(Map<String, TaskData<?>> input) {
         if (input == null || input.isEmpty()) {
             throw new IllegalArgumentException("input is null or empty");
         }
 
-        Document document =
-            TaskDataUtils.getPayload(input, "document", Document.class);
-        String fileId = TaskDataUtils.getPayload(input, "fileId", String.class);
-
-        if (document == null) {
-            CheckError error = new CheckError(
-                "Title.DocumentMissing",
-                "Document domain node is missing in input",
-                CheckError.Severity.ERROR,
-                fileId,
-                null,
-                null,
-                "Title"
-            );
-            return new TaskData<>(
-                CheckError.class,
-                TitleChecker.class.getSimpleName(),
-                System.currentTimeMillis(),
-                error
-            );
+        // check input param is valid
+        TaskData<?> checkInputResult = checkInput(input);
+        if (checkInputResult != null) {
+            return List.of(checkInputResult);
         }
+
+        // check business title domain is valid
+
 
         Heading h1 = findFirstH1(document);
         if (h1 == null) {

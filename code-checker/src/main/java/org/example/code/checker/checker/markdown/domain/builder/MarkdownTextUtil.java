@@ -1,4 +1,4 @@
-package org.example.code.checker.checker.markdown.domain.builder.standard;
+package org.example.code.checker.checker.markdown.domain.builder;
 
 import org.example.code.checker.checker.markdown.parser.ast.MdAstNode;
 

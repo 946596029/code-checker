@@ -1,14 +1,12 @@
 package org.example.test.checker.markdown.domain;
 
-import org.example.code.checker.checker.markdown.domain.StdNode;
-import org.example.code.checker.checker.markdown.domain.builder.standard.MarkdownDomainBuilder;
+import org.example.code.checker.checker.markdown.domain.MdDomain;
+import org.example.code.checker.checker.markdown.domain.builder.MarkdownDomainBuilder;
 import org.example.code.checker.checker.markdown.domain.standard.StandardNodeType;
 import org.example.code.checker.checker.markdown.domain.standard.block.BlockQuote;
 import org.example.code.checker.checker.markdown.domain.standard.block.CodeBlock;
-import org.example.code.checker.checker.markdown.domain.standard.block.Document;
 import org.example.code.checker.checker.markdown.domain.standard.block.Heading;
 import org.example.code.checker.checker.markdown.domain.standard.block.ListBlock;
-import org.example.code.checker.checker.markdown.domain.standard.block.ListItem;
 import org.example.code.checker.checker.markdown.domain.standard.block.Paragraph;
 import org.example.code.checker.checker.markdown.domain.standard.block.ThematicBreak;
 import org.example.code.checker.checker.markdown.domain.standard.inline.CodeSpan;
@@ -17,6 +15,7 @@ import org.example.code.checker.checker.markdown.domain.standard.inline.Strong;
 import org.example.code.checker.checker.markdown.domain.standard.inline.Text;
 import org.example.code.checker.checker.markdown.parser.MdAstGenerator;
 import org.example.code.checker.checker.markdown.parser.ast.MdAstNode;
+import org.example.code.checker.checker.utils.TreeNode;
 
 import java.util.List;
 import java.util.Optional;
@@ -49,56 +48,57 @@ public class MarkdownDomainBuilderMain {
 				+ "```\n";
 
 		MdAstNode root = MdAstGenerator.generateStandardAst(md, "in-memory.md");
-		Document doc = MarkdownDomainBuilder.buildDocument(root);
+		TreeNode<MdDomain> doc = MarkdownDomainBuilder.buildDocument(root);
 		printDocument(doc);
 	}
 
-	private static void printDocument(Document document) {
+	private static void printDocument(TreeNode<MdDomain> document) {
 		System.out.println("Document:");
-		List<StdNode> children = document.getChildren();
-		for (StdNode child : children) {
+		List<TreeNode<MdDomain>> children = document.getChildren();
+		for (TreeNode<MdDomain> child : children) {
 			printBlock(child, 1);
 		}
 	}
 
-	private static void printBlock(StdNode block, int indent) {
-		if (block instanceof Heading) {
-			Heading h = (Heading) block;
-			System.out.println(indent(indent) + "Heading(level=" + h.getLevel() + "): " + inlineText(h.getChildren()));
+	private static void printBlock(TreeNode<MdDomain> block, int indent) {
+        MdDomain domain = block.getData();
+		if (domain instanceof Heading) {
+			Heading h = (Heading) domain;
+			System.out.println(indent(indent) + "Heading(level=" + h.getLevel() + "): " + inlineText(block.getChildren()));
 			return;
 		}
-		if (block instanceof Paragraph) {
-			Paragraph p = (Paragraph) block;
-			System.out.println(indent(indent) + "Paragraph: " + inlineText(p.getChildren()));
+		if (domain instanceof Paragraph) {
+			Paragraph p = (Paragraph) domain;
+			System.out.println(indent(indent) + "Paragraph: " + inlineText(block.getChildren()));
 			return;
 		}
-		if (block instanceof ListBlock) {
-			ListBlock lb = (ListBlock) block;
+		if (domain instanceof ListBlock) {
+			ListBlock lb = (ListBlock) domain;
 			System.out.println(indent(indent) + "ListBlock(ordered=" + lb.isOrdered() + ", start=" + lb.getStartNumber() + "):");
-			for (StdNode item : lb.getChildren()) {
-                if (StandardNodeType.LIST_ITEM == item.getNodeType()) {
+			for (TreeNode<MdDomain> item : block.getChildren()) {
+                if (StandardNodeType.LIST_ITEM == item.getData().getNodeType()) {
                     System.out.println(indent(indent + 1) + "ListItem:");
-                    for (StdNode child : item.getChildren()) {
+                    for (TreeNode<MdDomain> child : item.getChildren()) {
                         printBlock(child, indent + 2);
                     }
                 }
 			}
 			return;
 		}
-		if (block instanceof BlockQuote) {
-			BlockQuote bq = (BlockQuote) block;
+		if (domain instanceof BlockQuote) {
+			BlockQuote bq = (BlockQuote) domain;
 			System.out.println(indent(indent) + "BlockQuote:");
-			for (StdNode child : bq.getChildren()) {
+			for (TreeNode<MdDomain> child : block.getChildren()) {
 				printBlock(child, indent + 1);
 			}
 			return;
 		}
-		if (block instanceof ThematicBreak) {
+		if (domain instanceof ThematicBreak) {
 			System.out.println(indent(indent) + "ThematicBreak");
 			return;
 		}
-		if (block instanceof CodeBlock) {
-			CodeBlock cb = (CodeBlock) block;
+		if (domain instanceof CodeBlock) {
+			CodeBlock cb = (CodeBlock) domain;
 			Optional<String> lang = cb.getLanguage();
 			String[] lines = cb.getContent().split("\\R", -1);
 			System.out.println(indent(indent) + "CodeBlock(lang=" + lang.orElse("null") + ", lines=" + lines.length + "):");
@@ -111,17 +111,18 @@ public class MarkdownDomainBuilderMain {
 		System.out.println(indent(indent) + block.getClass().getSimpleName());
 	}
 
-	private static String inlineText(List<StdNode> inlines) {
+	private static String inlineText(List<TreeNode<MdDomain>> inlines) {
 		StringBuilder sb = new StringBuilder();
-		for (StdNode in : inlines) {
-			if (in instanceof Text) {
-				sb.append(((Text) in).getContent());
-			} else if (in instanceof CodeSpan) {
-				sb.append('`').append(((CodeSpan) in).getCode()).append('`');
-			} else if (in instanceof Emphasis) {
-				sb.append('*').append(inlineText(((Emphasis) in).getChildren())).append('*');
-			} else if (in instanceof Strong) {
-				sb.append("**").append(inlineText(((Strong) in).getChildren())).append("**");
+		for (TreeNode<MdDomain> inline : inlines) {
+            MdDomain domain = inline.getData();
+			if (domain instanceof Text) {
+				sb.append(((Text) domain).getContent());
+			} else if (domain instanceof CodeSpan) {
+				sb.append('`').append(((CodeSpan) domain).getCode()).append('`');
+			} else if (domain instanceof Emphasis) {
+				sb.append('*').append(inlineText(inline.getChildren())).append('*');
+			} else if (domain instanceof Strong) {
+				sb.append("**").append(inlineText(inline.getChildren())).append("**");
 			} else {
 				// Unknown inline types degrade to empty textual representation
 			}
