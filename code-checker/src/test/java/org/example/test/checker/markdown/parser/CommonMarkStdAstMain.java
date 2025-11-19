@@ -2,8 +2,8 @@ package org.example.test.checker.markdown.parser;
 
 import org.example.code.checker.checker.markdown.parser.MdAstGenerator;
 import org.example.code.checker.checker.markdown.parser.ast.MdAstNode;
-import org.example.code.checker.checker.markdown.utils.FileUtils;
-import org.example.code.checker.checker.markdown.utils.StdAstPrinter;
+import org.example.code.checker.checker.utils.FileUtils;
+import org.example.code.checker.checker.markdown.parser.StdAstPrinter;
 
 import java.io.IOException;
 

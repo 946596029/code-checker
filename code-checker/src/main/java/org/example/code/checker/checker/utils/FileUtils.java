@@ -1,4 +1,4 @@
-package org.example.code.checker.checker.markdown.utils;
+package org.example.code.checker.checker.utils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

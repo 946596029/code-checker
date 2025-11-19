@@ -1,4 +1,4 @@
-package org.example.code.checker.checker.markdown.utils;
+package org.example.code.checker.checker.markdown.parser;
 
 import org.example.code.checker.checker.markdown.parser.ast.MdAstNode;
 import org.example.code.checker.checker.markdown.parser.ast.MdNodeType;

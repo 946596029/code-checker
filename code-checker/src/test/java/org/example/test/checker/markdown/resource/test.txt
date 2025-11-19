@@ -1,1 +1,459 @@
-DOCUMENT├── THEMATIC_BREAK├── HEADING {subcategory: "EventGrid (EG)"layout: "huaweicloud"page_title: "HuaweiCloud: huaweicloud_eg_event_subscription_target"description: |-Using this resource to manage EG event subscription target within Hu...}│   ├── TEXT {subcategory: "EventGrid (EG)"}│   ├── CUSTOM│   ├── TEXT {layout: "huaweicloud"}│   ├── CUSTOM│   ├── TEXT {page_title: "HuaweiCloud: huaweicloud_eg_event_subscription_target"}│   ├── CUSTOM│   ├── TEXT {description: |-}│   ├── CUSTOM│   └── TEXT {Using this resource to manage EG event subscription target within Huaweicloud.}├── HEADING {huaweicloud_eg_event_subscription_target}│   └── TEXT {huaweicloud_eg_event_subscription_target}├── PARAGRAPH {Using this resource to manage EG event subscription target within Huaweicloud.}│   └── TEXT {Using this resource to manage EG event subscription target within Huaweicloud.}├── PARAGRAPH {-> Manage this resource will cause the targets param of the huaweicloud_eg_event_subscription resource haschange plan. if both resources are managed together, please add ignore_changes = [targets]in h...}│   ├── TEXT {-> Manage this resource will cause the }│   ├── CODE {targets}│   ├── TEXT { param of the }│   ├── CODE {huaweicloud_eg_event_subscription}│   ├── TEXT { resource has}│   ├── CUSTOM│   ├── TEXT {change plan. if both resources are managed together, please add }│   ├── CODE {ignore_changes = [targets]}│   ├── CUSTOM│   ├── TEXT {in }│   ├── CODE {huaweicloud_eg_event_subscription}│   └── TEXT { to suppress this diff.}├── HEADING {Example Usage}│   └── TEXT {Example Usage}├── CODE_BLOCK {variable "target_name" {}variable "resource_urn" {}variable "subscription_id" {}resource "huaweicloud_eg_event_subscription_target" "test" {  subscription_id = var.subscription_id  name         ...}├── HEADING {Argument Reference}│   └── TEXT {Argument Reference}├── PARAGRAPH {The following arguments are supported:}│   └── TEXT {The following arguments are supported:}├── LIST│   ├── LIST_ITEM│   │   └── PARAGRAPH {region - (Optional, String, ForceNew) Specifies the region where the event subscription target is located.If omitted, the provider-level region will be used.Changing this parameter will create a new r...}│   │       ├── CODE {region}│   │       ├── TEXT { - (Optional, String, ForceNew) Specifies the region where the event subscription target is located.}│   │       ├── CUSTOM│   │       ├── TEXT {If omitted, the provider-level region will be used.}│   │       ├── CUSTOM│   │       └── TEXT {Changing this parameter will create a new resource.}│   ├── LIST_ITEM│   │   └── PARAGRAPH {subscription_id - (Required, String, NonUpdatable) Specifies the ID of the event subscription.}│   │       ├── CODE {subscription_id}│   │       └── TEXT { - (Required, String, NonUpdatable) Specifies the ID of the event subscription.}│   ├── LIST_ITEM│   │   ├── PARAGRAPH {name - (Required, String, NonUpdatable) Specifies the name of the event subscription target.The valid values are as follows:}│   │   │   ├── CODE {name}│   │   │   ├── TEXT { - (Required, String, NonUpdatable) Specifies the name of the event subscription target.}│   │   │   ├── CUSTOM│   │   │   └── TEXT {The valid values are as follows:}│   │   └── LIST│   │       ├── LIST_ITEM│   │       │   └── PARAGRAPH {HTTPS}│   │       │       └── STRONG│   │       │           └── TEXT {HTTPS}│   │       ├── LIST_ITEM│   │       │   └── PARAGRAPH {HC.APIGW}│   │       │       └── STRONG│   │       │           └── TEXT {HC.APIGW}│   │       ├── LIST_ITEM│   │       │   └── PARAGRAPH {HC.EG}│   │       │       └── STRONG│   │       │           └── TEXT {HC.EG}│   │       ├── LIST_ITEM│   │       │   └── PARAGRAPH {HC.FunctionGraph}│   │       │       └── STRONG│   │       │           └── TEXT {HC.FunctionGraph}│   │       ├── LIST_ITEM│   │       │   └── PARAGRAPH {HC.Kafka}│   │       │       └── STRONG│   │       │           └── TEXT {HC.Kafka}│   │       ├── LIST_ITEM│   │       │   └── PARAGRAPH {HC.OPENAPI}│   │       │       └── STRONG│   │       │           └── TEXT {HC.OPENAPI}│   │       └── LIST_ITEM│   │           └── PARAGRAPH {HC.SMN}│   │               └── STRONG│   │                   └── TEXT {HC.SMN}│   ├── LIST_ITEM│   │   ├── PARAGRAPH {provider_type - (Required, String, NonUpdatable) Specifies the provider type of the event subscription target.if the prefix of name is HC, then provider_type should be set to OFFICIAL.The valid values...}│   │   │   ├── CODE {provider_type}│   │   │   ├── TEXT { - (Required, String, NonUpdatable) Specifies the provider type of the event subscription target.}│   │   │   ├── CUSTOM│   │   │   ├── TEXT {if the prefix of }│   │   │   ├── CODE {name}│   │   │   ├── TEXT { is }│   │   │   ├── STRONG│   │   │   │   └── TEXT {HC}│   │   │   ├── TEXT {, then }│   │   │   ├── CODE {provider_type}│   │   │   ├── TEXT { should be set to }│   │   │   ├── STRONG│   │   │   │   └── TEXT {OFFICIAL}│   │   │   ├── TEXT {.}│   │   │   ├── CUSTOM│   │   │   └── TEXT {The valid values are as follows:}│   │   └── LIST│   │       ├── LIST_ITEM│   │       │   └── PARAGRAPH {OFFICIAL}│   │       │       └── STRONG│   │       │           └── TEXT {OFFICIAL}│   │       └── LIST_ITEM│   │           └── PARAGRAPH {CUSTOM}│   │               └── STRONG│   │                   └── TEXT {CUSTOM}│   ├── LIST_ITEM│   │   └── PARAGRAPH {key_transform - (Required, List) Specifies the transform configuration for event data transformation.The key_transform structure is documented below.}│   │       ├── CODE {key_transform}│   │       ├── TEXT { - (Required, List) Specifies the transform configuration for event data transformation.}│   │       ├── CUSTOM│   │       ├── TEXT {The }│   │       ├── LINK│   │       │   └── TEXT {key_transform}│   │       └── TEXT { structure is documented below.}│   ├── LIST_ITEM│   │   └── PARAGRAPH {connection_id - (Optional, String) Specifies the connection ID used by the event subscription target.}│   │       ├── CODE {connection_id}│   │       └── TEXT { - (Optional, String) Specifies the connection ID used by the event subscription target.}│   ├── LIST_ITEM│   │   └── PARAGRAPH {enterprise_project_id - (Optional, String) Specifies the ID of enterprise project.This parameter is only valid for enterprise user.}│   │       ├── CODE {enterprise_project_id}│   │       ├── TEXT { - (Optional, String) Specifies the ID of enterprise project.}│   │       ├── CUSTOM│   │       └── TEXT {This parameter is only valid for enterprise user.}│   ├── LIST_ITEM│   │   └── PARAGRAPH {detail - (Optional, String) Specifies the configuration details of the event subscription target, in JSON format.Required if the name is HTTPS, HC.FunctionGraph and HC.OPENAPI.}│   │       ├── CODE {detail}│   │       ├── TEXT { - (Optional, String) Specifies the configuration details of the event subscription target, in JSON format.}│   │       ├── CUSTOM│   │       ├── TEXT {Required if the }│   │       ├── CODE {name}│   │       ├── TEXT { is }│   │       ├── STRONG│   │       │   └── TEXT {HTTPS}│   │       ├── TEXT {, }│   │       ├── STRONG│   │       │   └── TEXT {HC.FunctionGraph}│   │       ├── TEXT { and }│   │       ├── STRONG│   │       │   └── TEXT {HC.OPENAPI}│   │       └── TEXT {.}│   ├── LIST_ITEM│   │   └── PARAGRAPH {kafka_detail - (Optional, List) Specifies the Kafka target configuration details.The kafka_detail structure is documented below.Required if the name is HC.Kafka.}│   │       ├── CODE {kafka_detail}│   │       ├── TEXT { - (Optional, List) Specifies the Kafka target configuration details.}│   │       ├── CUSTOM│   │       ├── TEXT {The }│   │       ├── LINK│   │       │   └── TEXT {kafka_detail}│   │       ├── TEXT { structure is documented below.}│   │       ├── CUSTOM│   │       ├── TEXT {Required if the }│   │       ├── CODE {name}│   │       ├── TEXT { is }│   │       ├── STRONG│   │       │   └── TEXT {HC.Kafka}│   │       └── TEXT {.}│   ├── LIST_ITEM│   │   └── PARAGRAPH {smn_detail - (Optional, List) Specifies the SMN target configuration details.The smn_detail structure is documented below.Required if the name is HC.SMN.}│   │       ├── CODE {smn_detail}│   │       ├── TEXT { - (Optional, List) Specifies the SMN target configuration details.}│   │       ├── CUSTOM│   │       ├── TEXT {The }│   │       ├── LINK│   │       │   └── TEXT {smn_detail}│   │       ├── TEXT { structure is documented below.}│   │       ├── CUSTOM│   │       ├── TEXT {Required if the }│   │       ├── CODE {name}│   │       ├── TEXT { is }│   │       ├── STRONG│   │       │   └── TEXT {HC.SMN}│   │       └── TEXT {.}│   ├── LIST_ITEM│   │   └── PARAGRAPH {eg_detail - (Optional, List) Specifies the EG channel target configuration details.The eg_detail structure is documented below.Required if the name is HC.EG.}│   │       ├── CODE {eg_detail}│   │       ├── TEXT { - (Optional, List) Specifies the EG channel target configuration details.}│   │       ├── CUSTOM│   │       ├── TEXT {The }│   │       ├── LINK│   │       │   └── TEXT {eg_detail}│   │       ├── TEXT { structure is documented below.}│   │       ├── CUSTOM│   │       ├── TEXT {Required if the }│   │       ├── CODE {name}│   │       ├── TEXT { is }│   │       ├── STRONG│   │       │   └── TEXT {HC.EG}│   │       └── TEXT {.}│   ├── LIST_ITEM│   │   └── PARAGRAPH {apigw_detail - (Optional, List) Specifies the APIGW target configuration details.The apigw_detail structure is documented below.Required if the name is HC.APIGW.}│   │       ├── CODE {apigw_detail}│   │       ├── TEXT { - (Optional, List) Specifies the APIGW target configuration details.}│   │       ├── CUSTOM│   │       ├── TEXT {The }│   │       ├── LINK│   │       │   └── TEXT {apigw_detail}│   │       ├── TEXT { structure is documented below.}│   │       ├── CUSTOM│   │       ├── TEXT {Required if the }│   │       ├── CODE {name}│   │       ├── TEXT { is }│   │       ├── STRONG│   │       │   └── TEXT {HC.APIGW}│   │       └── TEXT {.}│   ├── LIST_ITEM│   │   └── PARAGRAPH {retry_times - (Optional, Int) Specifies the number of retry times for the event subscription target.}│   │       ├── CODE {retry_times}│   │       └── TEXT { - (Optional, Int) Specifies the number of retry times for the event subscription target.}│   └── LIST_ITEM│       └── PARAGRAPH {dead_letter_queue - (Optional, List) Specifies the dead letter queue configuration of the event subscriptiontarget.The dead_letter_queue structure is documented below.}│           ├── CODE {dead_letter_queue}│           ├── TEXT { - (Optional, List) Specifies the dead letter queue configuration of the event subscription}│           ├── CUSTOM│           ├── TEXT {target.}│           ├── CUSTOM│           ├── TEXT {The }│           ├── LINK│           │   └── TEXT {dead_letter_queue}│           └── TEXT { structure is documented below.}├── PARAGRAPH {<a name="eg_target_key_transform"></a>The key_transform block supports:}│   ├── HTML_INLINE {<a name="eg_target_key_transform">}│   ├── HTML_INLINE {</a>}│   ├── CUSTOM│   ├── TEXT {The }│   ├── CODE {key_transform}│   └── TEXT { block supports:}├── LIST│   ├── LIST_ITEM│   │   ├── PARAGRAPH {type - (Required, String) Specifies the type of transform rule.The valid values are as follows:}│   │   │   ├── CODE {type}│   │   │   ├── TEXT { - (Required, String) Specifies the type of transform rule.}│   │   │   ├── CUSTOM│   │   │   └── TEXT {The valid values are as follows:}│   │   └── LIST│   │       ├── LIST_ITEM│   │       │   └── PARAGRAPH {ORIGINAL: passthrough variable.}│   │       │       ├── STRONG│   │       │       │   └── TEXT {ORIGINAL}│   │       │       └── TEXT {: passthrough variable.}│   │       ├── LIST_ITEM│   │       │   └── PARAGRAPH {CONSTANT: pass constant to target.}│   │       │       ├── STRONG│   │       │       │   └── TEXT {CONSTANT}│   │       │       └── TEXT {: pass constant to target.}│   │       └── LIST_ITEM│   │           └── PARAGRAPH {VARIABLE: pass variable to target.}│   │               ├── STRONG│   │               │   └── TEXT {VARIABLE}│   │               └── TEXT {: pass variable to target.}│   ├── LIST_ITEM│   │   └── PARAGRAPH {value - (Optional, String) Specifies the value of the transform rule.}│   │       ├── CODE {value}│   │       └── TEXT { - (Optional, String) Specifies the value of the transform rule.}│   └── LIST_ITEM│       └── PARAGRAPH {template - (Optional, String) Specifies the template definition for VARIABLE type transform rules.}│           ├── CODE {template}│           └── TEXT { - (Optional, String) Specifies the template definition for VARIABLE type transform rules.}├── PARAGRAPH {<a name="eg_target_kafka_detail"></a>The kafka_detail block supports:}│   ├── HTML_INLINE {<a name="eg_target_kafka_detail">}│   ├── HTML_INLINE {</a>}│   ├── CUSTOM│   ├── TEXT {The }│   ├── CODE {kafka_detail}│   └── TEXT { block supports:}├── LIST│   ├── LIST_ITEM│   │   └── PARAGRAPH {topic - (Required, String) Specifies the topic name of the Kafka instance.}│   │       ├── CODE {topic}│   │       └── TEXT { - (Required, String) Specifies the topic name of the Kafka instance.}│   └── LIST_ITEM│       └── PARAGRAPH {key_transform - (Optional, List) Specifies the transform configuration of the Kafka messages.The key_transform structure is documented below.}│           ├── CODE {key_transform}│           ├── TEXT { - (Optional, List) Specifies the transform configuration of the Kafka messages.}│           ├── CUSTOM│           ├── TEXT {The }│           ├── LINK│           │   └── TEXT {key_transform}│           └── TEXT { structure is documented below.}├── PARAGRAPH {<a name="eg_target_smn_detail"></a>The smn_detail block supports:}│   ├── HTML_INLINE {<a name="eg_target_smn_detail">}│   ├── HTML_INLINE {</a>}│   ├── CUSTOM│   ├── TEXT {The }│   ├── CODE {smn_detail}│   └── TEXT { block supports:}├── LIST│   ├── LIST_ITEM│   │   └── PARAGRAPH {urn - (Required, String) Specifies the URN of the SMN topic.}│   │       ├── CODE {urn}│   │       └── TEXT { - (Required, String) Specifies the URN of the SMN topic.}│   ├── LIST_ITEM│   │   └── PARAGRAPH {agency_name - (Required, String) Specifies the agency name for cross-account access.}│   │       ├── CODE {agency_name}│   │       └── TEXT { - (Required, String) Specifies the agency name for cross-account access.}│   └── LIST_ITEM│       └── PARAGRAPH {key_transform - (Optional, List) Specifies the subject transform configuration of the Kafkamessages.The key_transform structure is documented below.}│           ├── CODE {key_transform}│           ├── TEXT { - (Optional, List) Specifies the subject transform configuration of the Kafka}│           ├── CUSTOM│           ├── TEXT {messages.}│           ├── CUSTOM│           ├── TEXT {The }│           ├── LINK│           │   └── TEXT {key_transform}│           └── TEXT { structure is documented below.}├── PARAGRAPH {<a name="eg_target_eg_detail"></a>The eg_detail block supports:}│   ├── HTML_INLINE {<a name="eg_target_eg_detail">}│   ├── HTML_INLINE {</a>}│   ├── CUSTOM│   ├── TEXT {The }│   ├── CODE {eg_detail}│   └── TEXT { block supports:}├── LIST│   ├── LIST_ITEM│   │   └── PARAGRAPH {target_project_id - (Required, String) Specifies the target project ID of the EG channel.}│   │       ├── CODE {target_project_id}│   │       └── TEXT { - (Required, String) Specifies the target project ID of the EG channel.}│   ├── LIST_ITEM│   │   └── PARAGRAPH {target_channel_id - (Required, String) Specifies the target channel ID of the EG channel.}│   │       ├── CODE {target_channel_id}│   │       └── TEXT { - (Required, String) Specifies the target channel ID of the EG channel.}│   ├── LIST_ITEM│   │   └── PARAGRAPH {target_region - (Required, String) Specifies the target region of the EG channel.}│   │       ├── CODE {target_region}│   │       └── TEXT { - (Required, String) Specifies the target region of the EG channel.}│   ├── LIST_ITEM│   │   └── PARAGRAPH {agency_name - (Required, String) Specifies the agency name for cross-account access.}│   │       ├── CODE {agency_name}│   │       └── TEXT { - (Required, String) Specifies the agency name for cross-account access.}│   ├── LIST_ITEM│   │   └── PARAGRAPH {cross_region - (Optional, Bool) Specifies whether this is a cross-region EG channel target.}│   │       ├── CODE {cross_region}│   │       └── TEXT { - (Optional, Bool) Specifies whether this is a cross-region EG channel target.}│   └── LIST_ITEM│       └── PARAGRAPH {cross_account - (Optional, Bool) Specifies whether this is a cross-account EG channel target.}│           ├── CODE {cross_account}│           └── TEXT { - (Optional, Bool) Specifies whether this is a cross-account EG channel target.}├── PARAGRAPH {<a name="eg_target_apigw_detail"></a>The apigw_detail block supports:}│   ├── HTML_INLINE {<a name="eg_target_apigw_detail">}│   ├── HTML_INLINE {</a>}│   ├── CUSTOM│   ├── TEXT {The }│   ├── CODE {apigw_detail}│   └── TEXT { block supports:}├── LIST│   ├── LIST_ITEM│   │   └── PARAGRAPH {url - (Required, String) Specifies the URL of the APIGW endpoint.}│   │       ├── CODE {url}│   │       └── TEXT { - (Required, String) Specifies the URL of the APIGW endpoint.}│   └── LIST_ITEM│       └── PARAGRAPH {invocation_http_parameters - (Optional, List) Specifies the HTTP parameters for the APIGW invocation.The invocation_http_parameters structure is documented below.}│           ├── CODE {invocation_http_parameters}│           ├── TEXT { - (Optional, List) Specifies the HTTP parameters for the APIGW invocation.}│           ├── CUSTOM│           ├── TEXT {The }│           ├── LINK│           │   └── TEXT {invocation_http_parameters}│           └── TEXT { structure is documented below.}├── PARAGRAPH {<a name="eg_target_apigw_parameters"></a>The invocation_http_parameters block supports:}│   ├── HTML_INLINE {<a name="eg_target_apigw_parameters">}│   ├── HTML_INLINE {</a>}│   ├── CUSTOM│   ├── TEXT {The }│   ├── CODE {invocation_http_parameters}│   └── TEXT { block supports:}├── LIST│   └── LIST_ITEM│       └── PARAGRAPH {header_parameters - (Optional, List) Specifies the header parameters for the HTTP request.The header_parameters structure is documented below.}│           ├── CODE {header_parameters}│           ├── TEXT { - (Optional, List) Specifies the header parameters for the HTTP request.}│           ├── CUSTOM│           ├── TEXT {The }│           ├── LINK│           │   └── TEXT {header_parameters}│           └── TEXT { structure is documented below.}├── PARAGRAPH {<a name="eg_target_apigw_header_parameter"></a>The header_parameters block supports:}│   ├── HTML_INLINE {<a name="eg_target_apigw_header_parameter">}│   ├── HTML_INLINE {</a>}│   ├── CUSTOM│   ├── TEXT {The }│   ├── CODE {header_parameters}│   └── TEXT { block supports:}├── LIST│   ├── LIST_ITEM│   │   └── PARAGRAPH {key - (Optional, String) Specifies the key of the header parameter.}│   │       ├── CODE {key}│   │       └── TEXT { - (Optional, String) Specifies the key of the header parameter.}│   ├── LIST_ITEM│   │   └── PARAGRAPH {value - (Optional, String) Specifies the value of the header parameter.}│   │       ├── CODE {value}│   │       └── TEXT { - (Optional, String) Specifies the value of the header parameter.}│   └── LIST_ITEM│       └── PARAGRAPH {is_value_secret - (Optional, Bool) Specifies whether the header parameter value is secret.}│           ├── CODE {is_value_secret}│           └── TEXT { - (Optional, Bool) Specifies whether the header parameter value is secret.}├── PARAGRAPH {<a name="eg_target_dead_letter_queue"></a>The dead_letter_queue block supports:}│   ├── HTML_INLINE {<a name="eg_target_dead_letter_queue">}│   ├── HTML_INLINE {</a>}│   ├── CUSTOM│   ├── TEXT {The }│   ├── CODE {dead_letter_queue}│   └── TEXT { block supports:}├── LIST│   ├── LIST_ITEM│   │   └── PARAGRAPH {type - (Required, String) Specifies the type of dead letter queue.}│   │       ├── CODE {type}│   │       └── TEXT { - (Required, String) Specifies the type of dead letter queue.}│   ├── LIST_ITEM│   │   └── PARAGRAPH {instance_id - (Required, String) Specifies the instance ID of the dead letter queue.}│   │       ├── CODE {instance_id}│   │       └── TEXT { - (Required, String) Specifies the instance ID of the dead letter queue.}│   ├── LIST_ITEM│   │   └── PARAGRAPH {connection_id - (Required, String) Specifies the connection ID of the dead letter queue.}│   │       ├── CODE {connection_id}│   │       └── TEXT { - (Required, String) Specifies the connection ID of the dead letter queue.}│   └── LIST_ITEM│       └── PARAGRAPH {topic - (Required, String) Specifies The topic name of the dead letter queue.}│           ├── CODE {topic}│           └── TEXT { - (Required, String) Specifies The topic name of the dead letter queue.}├── HEADING {Attribute Reference}│   └── TEXT {Attribute Reference}├── PARAGRAPH {In addition to all arguments above, the following attributes are exported:}│   └── TEXT {In addition to all arguments above, the following attributes are exported:}├── LIST│   ├── LIST_ITEM│   │   └── PARAGRAPH {id - The resource ID.}│   │       ├── CODE {id}│   │       └── TEXT { - The resource ID.}│   ├── LIST_ITEM│   │   └── PARAGRAPH {created_at - The create time, in UTC format.}│   │       ├── CODE {created_at}│   │       └── TEXT { - The create time, in UTC format.}│   └── LIST_ITEM│       └── PARAGRAPH {updated_at - The update time, in UTC format.}│           ├── CODE {updated_at}│           └── TEXT { - The update time, in UTC format.}├── HEADING {Import}│   └── TEXT {Import}├── PARAGRAPH {Event subscription target can be imported using subscription_id and id, separated by a slash (/), e.g.}│   ├── TEXT {Event subscription target can be imported using }│   ├── CODE {subscription_id}│   ├── TEXT { and }│   ├── CODE {id}│   └── TEXT {, separated by a slash (/), e.g.}└── CODE_BLOCK {$ terraform import huaweicloud_eg_event_subscription_target.test <subscription_id>/<id>}
+DOCUMENT
+├── THEMATIC_BREAK
+├── HEADING {subcategory: "EventGrid (EG)"layout: "huaweicloud"page_title: "HuaweiCloud: huaweicloud_eg_event_subscription_target"description: |-Using this resource to manage EG event subscription target within Hu...}
+│   ├── TEXT {subcategory: "EventGrid (EG)"}
+│   ├── CUSTOM
+│   ├── TEXT {layout: "huaweicloud"}
+│   ├── CUSTOM
+│   ├── TEXT {page_title: "HuaweiCloud: huaweicloud_eg_event_subscription_target"}
+│   ├── CUSTOM
+│   ├── TEXT {description: |-}
+│   ├── CUSTOM
+│   └── TEXT {Using this resource to manage EG event subscription target within Huaweicloud.}
+├── HEADING {huaweicloud_eg_event_subscription_target}
+│   └── TEXT {huaweicloud_eg_event_subscription_target}
+├── PARAGRAPH {Using this resource to manage EG event subscription target within Huaweicloud.}
+│   └── TEXT {Using this resource to manage EG event subscription target within Huaweicloud.}
+├── PARAGRAPH {-> Manage this resource will cause the targets param of the huaweicloud_eg_event_subscription resource haschange plan. if both resources are managed together, please add ignore_changes = [targets]in h...}
+│   ├── TEXT {-> Manage this resource will cause the }
+│   ├── CODE {targets}
+│   ├── TEXT { param of the }
+│   ├── CODE {huaweicloud_eg_event_subscription}
+│   ├── TEXT { resource has}
+│   ├── CUSTOM
+│   ├── TEXT {change plan. if both resources are managed together, please add }
+│   ├── CODE {ignore_changes = [targets]}
+│   ├── CUSTOM
+│   ├── TEXT {in }
+│   ├── CODE {huaweicloud_eg_event_subscription}
+│   └── TEXT { to suppress this diff.}
+├── HEADING {Example Usage}
+│   └── TEXT {Example Usage}
+├── CODE_BLOCK {variable "target_name" {}
+variable "resource_urn" {}
+variable "subscription_id" {}
+
+resource "huaweicloud_eg_event_subscription_target" "test" {
+  subscription_id = var.subscription_id
+  name         ...}
+├── HEADING {Argument Reference}
+│   └── TEXT {Argument Reference}
+├── PARAGRAPH {The following arguments are supported:}
+│   └── TEXT {The following arguments are supported:}
+├── LIST
+│   ├── LIST_ITEM
+│   │   └── PARAGRAPH {region - (Optional, String, ForceNew) Specifies the region where the event subscription target is located.If omitted, the provider-level region will be used.Changing this parameter will create a new r...}
+│   │       ├── CODE {region}
+│   │       ├── TEXT { - (Optional, String, ForceNew) Specifies the region where the event subscription target is located.}
+│   │       ├── CUSTOM
+│   │       ├── TEXT {If omitted, the provider-level region will be used.}
+│   │       ├── CUSTOM
+│   │       └── TEXT {Changing this parameter will create a new resource.}
+│   ├── LIST_ITEM
+│   │   └── PARAGRAPH {subscription_id - (Required, String, NonUpdatable) Specifies the ID of the event subscription.}
+│   │       ├── CODE {subscription_id}
+│   │       └── TEXT { - (Required, String, NonUpdatable) Specifies the ID of the event subscription.}
+│   ├── LIST_ITEM
+│   │   ├── PARAGRAPH {name - (Required, String, NonUpdatable) Specifies the name of the event subscription target.The valid values are as follows:}
+│   │   │   ├── CODE {name}
+│   │   │   ├── TEXT { - (Required, String, NonUpdatable) Specifies the name of the event subscription target.}
+│   │   │   ├── CUSTOM
+│   │   │   └── TEXT {The valid values are as follows:}
+│   │   └── LIST
+│   │       ├── LIST_ITEM
+│   │       │   └── PARAGRAPH {HTTPS}
+│   │       │       └── STRONG
+│   │       │           └── TEXT {HTTPS}
+│   │       ├── LIST_ITEM
+│   │       │   └── PARAGRAPH {HC.APIGW}
+│   │       │       └── STRONG
+│   │       │           └── TEXT {HC.APIGW}
+│   │       ├── LIST_ITEM
+│   │       │   └── PARAGRAPH {HC.EG}
+│   │       │       └── STRONG
+│   │       │           └── TEXT {HC.EG}
+│   │       ├── LIST_ITEM
+│   │       │   └── PARAGRAPH {HC.FunctionGraph}
+│   │       │       └── STRONG
+│   │       │           └── TEXT {HC.FunctionGraph}
+│   │       ├── LIST_ITEM
+│   │       │   └── PARAGRAPH {HC.Kafka}
+│   │       │       └── STRONG
+│   │       │           └── TEXT {HC.Kafka}
+│   │       ├── LIST_ITEM
+│   │       │   └── PARAGRAPH {HC.OPENAPI}
+│   │       │       └── STRONG
+│   │       │           └── TEXT {HC.OPENAPI}
+│   │       └── LIST_ITEM
+│   │           └── PARAGRAPH {HC.SMN}
+│   │               └── STRONG
+│   │                   └── TEXT {HC.SMN}
+│   ├── LIST_ITEM
+│   │   ├── PARAGRAPH {provider_type - (Required, String, NonUpdatable) Specifies the provider type of the event subscription target.if the prefix of name is HC, then provider_type should be set to OFFICIAL.The valid values...}
+│   │   │   ├── CODE {provider_type}
+│   │   │   ├── TEXT { - (Required, String, NonUpdatable) Specifies the provider type of the event subscription target.}
+│   │   │   ├── CUSTOM
+│   │   │   ├── TEXT {if the prefix of }
+│   │   │   ├── CODE {name}
+│   │   │   ├── TEXT { is }
+│   │   │   ├── STRONG
+│   │   │   │   └── TEXT {HC}
+│   │   │   ├── TEXT {, then }
+│   │   │   ├── CODE {provider_type}
+│   │   │   ├── TEXT { should be set to }
+│   │   │   ├── STRONG
+│   │   │   │   └── TEXT {OFFICIAL}
+│   │   │   ├── TEXT {.}
+│   │   │   ├── CUSTOM
+│   │   │   └── TEXT {The valid values are as follows:}
+│   │   └── LIST
+│   │       ├── LIST_ITEM
+│   │       │   └── PARAGRAPH {OFFICIAL}
+│   │       │       └── STRONG
+│   │       │           └── TEXT {OFFICIAL}
+│   │       └── LIST_ITEM
+│   │           └── PARAGRAPH {CUSTOM}
+│   │               └── STRONG
+│   │                   └── TEXT {CUSTOM}
+│   ├── LIST_ITEM
+│   │   └── PARAGRAPH {key_transform - (Required, List) Specifies the transform configuration for event data transformation.The key_transform structure is documented below.}
+│   │       ├── CODE {key_transform}
+│   │       ├── TEXT { - (Required, List) Specifies the transform configuration for event data transformation.}
+│   │       ├── CUSTOM
+│   │       ├── TEXT {The }
+│   │       ├── LINK
+│   │       │   └── TEXT {key_transform}
+│   │       └── TEXT { structure is documented below.}
+│   ├── LIST_ITEM
+│   │   └── PARAGRAPH {connection_id - (Optional, String) Specifies the connection ID used by the event subscription target.}
+│   │       ├── CODE {connection_id}
+│   │       └── TEXT { - (Optional, String) Specifies the connection ID used by the event subscription target.}
+│   ├── LIST_ITEM
+│   │   └── PARAGRAPH {enterprise_project_id - (Optional, String) Specifies the ID of enterprise project.This parameter is only valid for enterprise user.}
+│   │       ├── CODE {enterprise_project_id}
+│   │       ├── TEXT { - (Optional, String) Specifies the ID of enterprise project.}
+│   │       ├── CUSTOM
+│   │       └── TEXT {This parameter is only valid for enterprise user.}
+│   ├── LIST_ITEM
+│   │   └── PARAGRAPH {detail - (Optional, String) Specifies the configuration details of the event subscription target, in JSON format.Required if the name is HTTPS, HC.FunctionGraph and HC.OPENAPI.}
+│   │       ├── CODE {detail}
+│   │       ├── TEXT { - (Optional, String) Specifies the configuration details of the event subscription target, in JSON format.}
+│   │       ├── CUSTOM
+│   │       ├── TEXT {Required if the }
+│   │       ├── CODE {name}
+│   │       ├── TEXT { is }
+│   │       ├── STRONG
+│   │       │   └── TEXT {HTTPS}
+│   │       ├── TEXT {, }
+│   │       ├── STRONG
+│   │       │   └── TEXT {HC.FunctionGraph}
+│   │       ├── TEXT { and }
+│   │       ├── STRONG
+│   │       │   └── TEXT {HC.OPENAPI}
+│   │       └── TEXT {.}
+│   ├── LIST_ITEM
+│   │   └── PARAGRAPH {kafka_detail - (Optional, List) Specifies the Kafka target configuration details.The kafka_detail structure is documented below.Required if the name is HC.Kafka.}
+│   │       ├── CODE {kafka_detail}
+│   │       ├── TEXT { - (Optional, List) Specifies the Kafka target configuration details.}
+│   │       ├── CUSTOM
+│   │       ├── TEXT {The }
+│   │       ├── LINK
+│   │       │   └── TEXT {kafka_detail}
+│   │       ├── TEXT { structure is documented below.}
+│   │       ├── CUSTOM
+│   │       ├── TEXT {Required if the }
+│   │       ├── CODE {name}
+│   │       ├── TEXT { is }
+│   │       ├── STRONG
+│   │       │   └── TEXT {HC.Kafka}
+│   │       └── TEXT {.}
+│   ├── LIST_ITEM
+│   │   └── PARAGRAPH {smn_detail - (Optional, List) Specifies the SMN target configuration details.The smn_detail structure is documented below.Required if the name is HC.SMN.}
+│   │       ├── CODE {smn_detail}
+│   │       ├── TEXT { - (Optional, List) Specifies the SMN target configuration details.}
+│   │       ├── CUSTOM
+│   │       ├── TEXT {The }
+│   │       ├── LINK
+│   │       │   └── TEXT {smn_detail}
+│   │       ├── TEXT { structure is documented below.}
+│   │       ├── CUSTOM
+│   │       ├── TEXT {Required if the }
+│   │       ├── CODE {name}
+│   │       ├── TEXT { is }
+│   │       ├── STRONG
+│   │       │   └── TEXT {HC.SMN}
+│   │       └── TEXT {.}
+│   ├── LIST_ITEM
+│   │   └── PARAGRAPH {eg_detail - (Optional, List) Specifies the EG channel target configuration details.The eg_detail structure is documented below.Required if the name is HC.EG.}
+│   │       ├── CODE {eg_detail}
+│   │       ├── TEXT { - (Optional, List) Specifies the EG channel target configuration details.}
+│   │       ├── CUSTOM
+│   │       ├── TEXT {The }
+│   │       ├── LINK
+│   │       │   └── TEXT {eg_detail}
+│   │       ├── TEXT { structure is documented below.}
+│   │       ├── CUSTOM
+│   │       ├── TEXT {Required if the }
+│   │       ├── CODE {name}
+│   │       ├── TEXT { is }
+│   │       ├── STRONG
+│   │       │   └── TEXT {HC.EG}
+│   │       └── TEXT {.}
+│   ├── LIST_ITEM
+│   │   └── PARAGRAPH {apigw_detail - (Optional, List) Specifies the APIGW target configuration details.The apigw_detail structure is documented below.Required if the name is HC.APIGW.}
+│   │       ├── CODE {apigw_detail}
+│   │       ├── TEXT { - (Optional, List) Specifies the APIGW target configuration details.}
+│   │       ├── CUSTOM
+│   │       ├── TEXT {The }
+│   │       ├── LINK
+│   │       │   └── TEXT {apigw_detail}
+│   │       ├── TEXT { structure is documented below.}
+│   │       ├── CUSTOM
+│   │       ├── TEXT {Required if the }
+│   │       ├── CODE {name}
+│   │       ├── TEXT { is }
+│   │       ├── STRONG
+│   │       │   └── TEXT {HC.APIGW}
+│   │       └── TEXT {.}
+│   ├── LIST_ITEM
+│   │   └── PARAGRAPH {retry_times - (Optional, Int) Specifies the number of retry times for the event subscription target.}
+│   │       ├── CODE {retry_times}
+│   │       └── TEXT { - (Optional, Int) Specifies the number of retry times for the event subscription target.}
+│   └── LIST_ITEM
+│       └── PARAGRAPH {dead_letter_queue - (Optional, List) Specifies the dead letter queue configuration of the event subscriptiontarget.The dead_letter_queue structure is documented below.}
+│           ├── CODE {dead_letter_queue}
+│           ├── TEXT { - (Optional, List) Specifies the dead letter queue configuration of the event subscription}
+│           ├── CUSTOM
+│           ├── TEXT {target.}
+│           ├── CUSTOM
+│           ├── TEXT {The }
+│           ├── LINK
+│           │   └── TEXT {dead_letter_queue}
+│           └── TEXT { structure is documented below.}
+├── PARAGRAPH {<a name="eg_target_key_transform"></a>The key_transform block supports:}
+│   ├── HTML_INLINE {<a name="eg_target_key_transform">}
+│   ├── HTML_INLINE {</a>}
+│   ├── CUSTOM
+│   ├── TEXT {The }
+│   ├── CODE {key_transform}
+│   └── TEXT { block supports:}
+├── LIST
+│   ├── LIST_ITEM
+│   │   ├── PARAGRAPH {type - (Required, String) Specifies the type of transform rule.The valid values are as follows:}
+│   │   │   ├── CODE {type}
+│   │   │   ├── TEXT { - (Required, String) Specifies the type of transform rule.}
+│   │   │   ├── CUSTOM
+│   │   │   └── TEXT {The valid values are as follows:}
+│   │   └── LIST
+│   │       ├── LIST_ITEM
+│   │       │   └── PARAGRAPH {ORIGINAL: passthrough variable.}
+│   │       │       ├── STRONG
+│   │       │       │   └── TEXT {ORIGINAL}
+│   │       │       └── TEXT {: passthrough variable.}
+│   │       ├── LIST_ITEM
+│   │       │   └── PARAGRAPH {CONSTANT: pass constant to target.}
+│   │       │       ├── STRONG
+│   │       │       │   └── TEXT {CONSTANT}
+│   │       │       └── TEXT {: pass constant to target.}
+│   │       └── LIST_ITEM
+│   │           └── PARAGRAPH {VARIABLE: pass variable to target.}
+│   │               ├── STRONG
+│   │               │   └── TEXT {VARIABLE}
+│   │               └── TEXT {: pass variable to target.}
+│   ├── LIST_ITEM
+│   │   └── PARAGRAPH {value - (Optional, String) Specifies the value of the transform rule.}
+│   │       ├── CODE {value}
+│   │       └── TEXT { - (Optional, String) Specifies the value of the transform rule.}
+│   └── LIST_ITEM
+│       └── PARAGRAPH {template - (Optional, String) Specifies the template definition for VARIABLE type transform rules.}
+│           ├── CODE {template}
+│           └── TEXT { - (Optional, String) Specifies the template definition for VARIABLE type transform rules.}
+├── PARAGRAPH {<a name="eg_target_kafka_detail"></a>The kafka_detail block supports:}
+│   ├── HTML_INLINE {<a name="eg_target_kafka_detail">}
+│   ├── HTML_INLINE {</a>}
+│   ├── CUSTOM
+│   ├── TEXT {The }
+│   ├── CODE {kafka_detail}
+│   └── TEXT { block supports:}
+├── LIST
+│   ├── LIST_ITEM
+│   │   └── PARAGRAPH {topic - (Required, String) Specifies the topic name of the Kafka instance.}
+│   │       ├── CODE {topic}
+│   │       └── TEXT { - (Required, String) Specifies the topic name of the Kafka instance.}
+│   └── LIST_ITEM
+│       └── PARAGRAPH {key_transform - (Optional, List) Specifies the transform configuration of the Kafka messages.The key_transform structure is documented below.}
+│           ├── CODE {key_transform}
+│           ├── TEXT { - (Optional, List) Specifies the transform configuration of the Kafka messages.}
+│           ├── CUSTOM
+│           ├── TEXT {The }
+│           ├── LINK
+│           │   └── TEXT {key_transform}
+│           └── TEXT { structure is documented below.}
+├── PARAGRAPH {<a name="eg_target_smn_detail"></a>The smn_detail block supports:}
+│   ├── HTML_INLINE {<a name="eg_target_smn_detail">}
+│   ├── HTML_INLINE {</a>}
+│   ├── CUSTOM
+│   ├── TEXT {The }
+│   ├── CODE {smn_detail}
+│   └── TEXT { block supports:}
+├── LIST
+│   ├── LIST_ITEM
+│   │   └── PARAGRAPH {urn - (Required, String) Specifies the URN of the SMN topic.}
+│   │       ├── CODE {urn}
+│   │       └── TEXT { - (Required, String) Specifies the URN of the SMN topic.}
+│   ├── LIST_ITEM
+│   │   └── PARAGRAPH {agency_name - (Required, String) Specifies the agency name for cross-account access.}
+│   │       ├── CODE {agency_name}
+│   │       └── TEXT { - (Required, String) Specifies the agency name for cross-account access.}
+│   └── LIST_ITEM
+│       └── PARAGRAPH {key_transform - (Optional, List) Specifies the subject transform configuration of the Kafkamessages.The key_transform structure is documented below.}
+│           ├── CODE {key_transform}
+│           ├── TEXT { - (Optional, List) Specifies the subject transform configuration of the Kafka}
+│           ├── CUSTOM
+│           ├── TEXT {messages.}
+│           ├── CUSTOM
+│           ├── TEXT {The }
+│           ├── LINK
+│           │   └── TEXT {key_transform}
+│           └── TEXT { structure is documented below.}
+├── PARAGRAPH {<a name="eg_target_eg_detail"></a>The eg_detail block supports:}
+│   ├── HTML_INLINE {<a name="eg_target_eg_detail">}
+│   ├── HTML_INLINE {</a>}
+│   ├── CUSTOM
+│   ├── TEXT {The }
+│   ├── CODE {eg_detail}
+│   └── TEXT { block supports:}
+├── LIST
+│   ├── LIST_ITEM
+│   │   └── PARAGRAPH {target_project_id - (Required, String) Specifies the target project ID of the EG channel.}
+│   │       ├── CODE {target_project_id}
+│   │       └── TEXT { - (Required, String) Specifies the target project ID of the EG channel.}
+│   ├── LIST_ITEM
+│   │   └── PARAGRAPH {target_channel_id - (Required, String) Specifies the target channel ID of the EG channel.}
+│   │       ├── CODE {target_channel_id}
+│   │       └── TEXT { - (Required, String) Specifies the target channel ID of the EG channel.}
+│   ├── LIST_ITEM
+│   │   └── PARAGRAPH {target_region - (Required, String) Specifies the target region of the EG channel.}
+│   │       ├── CODE {target_region}
+│   │       └── TEXT { - (Required, String) Specifies the target region of the EG channel.}
+│   ├── LIST_ITEM
+│   │   └── PARAGRAPH {agency_name - (Required, String) Specifies the agency name for cross-account access.}
+│   │       ├── CODE {agency_name}
+│   │       └── TEXT { - (Required, String) Specifies the agency name for cross-account access.}
+│   ├── LIST_ITEM
+│   │   └── PARAGRAPH {cross_region - (Optional, Bool) Specifies whether this is a cross-region EG channel target.}
+│   │       ├── CODE {cross_region}
+│   │       └── TEXT { - (Optional, Bool) Specifies whether this is a cross-region EG channel target.}
+│   └── LIST_ITEM
+│       └── PARAGRAPH {cross_account - (Optional, Bool) Specifies whether this is a cross-account EG channel target.}
+│           ├── CODE {cross_account}
+│           └── TEXT { - (Optional, Bool) Specifies whether this is a cross-account EG channel target.}
+├── PARAGRAPH {<a name="eg_target_apigw_detail"></a>The apigw_detail block supports:}
+│   ├── HTML_INLINE {<a name="eg_target_apigw_detail">}
+│   ├── HTML_INLINE {</a>}
+│   ├── CUSTOM
+│   ├── TEXT {The }
+│   ├── CODE {apigw_detail}
+│   └── TEXT { block supports:}
+├── LIST
+│   ├── LIST_ITEM
+│   │   └── PARAGRAPH {url - (Required, String) Specifies the URL of the APIGW endpoint.}
+│   │       ├── CODE {url}
+│   │       └── TEXT { - (Required, String) Specifies the URL of the APIGW endpoint.}
+│   └── LIST_ITEM
+│       └── PARAGRAPH {invocation_http_parameters - (Optional, List) Specifies the HTTP parameters for the APIGW invocation.The invocation_http_parameters structure is documented below.}
+│           ├── CODE {invocation_http_parameters}
+│           ├── TEXT { - (Optional, List) Specifies the HTTP parameters for the APIGW invocation.}
+│           ├── CUSTOM
+│           ├── TEXT {The }
+│           ├── LINK
+│           │   └── TEXT {invocation_http_parameters}
+│           └── TEXT { structure is documented below.}
+├── PARAGRAPH {<a name="eg_target_apigw_parameters"></a>The invocation_http_parameters block supports:}
+│   ├── HTML_INLINE {<a name="eg_target_apigw_parameters">}
+│   ├── HTML_INLINE {</a>}
+│   ├── CUSTOM
+│   ├── TEXT {The }
+│   ├── CODE {invocation_http_parameters}
+│   └── TEXT { block supports:}
+├── LIST
+│   └── LIST_ITEM
+│       └── PARAGRAPH {header_parameters - (Optional, List) Specifies the header parameters for the HTTP request.The header_parameters structure is documented below.}
+│           ├── CODE {header_parameters}
+│           ├── TEXT { - (Optional, List) Specifies the header parameters for the HTTP request.}
+│           ├── CUSTOM
+│           ├── TEXT {The }
+│           ├── LINK
+│           │   └── TEXT {header_parameters}
+│           └── TEXT { structure is documented below.}
+├── PARAGRAPH {<a name="eg_target_apigw_header_parameter"></a>The header_parameters block supports:}
+│   ├── HTML_INLINE {<a name="eg_target_apigw_header_parameter">}
+│   ├── HTML_INLINE {</a>}
+│   ├── CUSTOM
+│   ├── TEXT {The }
+│   ├── CODE {header_parameters}
+│   └── TEXT { block supports:}
+├── LIST
+│   ├── LIST_ITEM
+│   │   └── PARAGRAPH {key - (Optional, String) Specifies the key of the header parameter.}
+│   │       ├── CODE {key}
+│   │       └── TEXT { - (Optional, String) Specifies the key of the header parameter.}
+│   ├── LIST_ITEM
+│   │   └── PARAGRAPH {value - (Optional, String) Specifies the value of the header parameter.}
+│   │       ├── CODE {value}
+│   │       └── TEXT { - (Optional, String) Specifies the value of the header parameter.}
+│   └── LIST_ITEM
+│       └── PARAGRAPH {is_value_secret - (Optional, Bool) Specifies whether the header parameter value is secret.}
+│           ├── CODE {is_value_secret}
+│           └── TEXT { - (Optional, Bool) Specifies whether the header parameter value is secret.}
+├── PARAGRAPH {<a name="eg_target_dead_letter_queue"></a>The dead_letter_queue block supports:}
+│   ├── HTML_INLINE {<a name="eg_target_dead_letter_queue">}
+│   ├── HTML_INLINE {</a>}
+│   ├── CUSTOM
+│   ├── TEXT {The }
+│   ├── CODE {dead_letter_queue}
+│   └── TEXT { block supports:}
+├── LIST
+│   ├── LIST_ITEM
+│   │   └── PARAGRAPH {type - (Required, String) Specifies the type of dead letter queue.}
+│   │       ├── CODE {type}
+│   │       └── TEXT { - (Required, String) Specifies the type of dead letter queue.}
+│   ├── LIST_ITEM
+│   │   └── PARAGRAPH {instance_id - (Required, String) Specifies the instance ID of the dead letter queue.}
+│   │       ├── CODE {instance_id}
+│   │       └── TEXT { - (Required, String) Specifies the instance ID of the dead letter queue.}
+│   ├── LIST_ITEM
+│   │   └── PARAGRAPH {connection_id - (Required, String) Specifies the connection ID of the dead letter queue.}
+│   │       ├── CODE {connection_id}
+│   │       └── TEXT { - (Required, String) Specifies the connection ID of the dead letter queue.}
+│   └── LIST_ITEM
+│       └── PARAGRAPH {topic - (Required, String) Specifies The topic name of the dead letter queue.}
+│           ├── CODE {topic}
+│           └── TEXT { - (Required, String) Specifies The topic name of the dead letter queue.}
+├── HEADING {Attribute Reference}
+│   └── TEXT {Attribute Reference}
+├── PARAGRAPH {In addition to all arguments above, the following attributes are exported:}
+│   └── TEXT {In addition to all arguments above, the following attributes are exported:}
+├── LIST
+│   ├── LIST_ITEM
+│   │   └── PARAGRAPH {id - The resource ID.}
+│   │       ├── CODE {id}
+│   │       └── TEXT { - The resource ID.}
+│   ├── LIST_ITEM
+│   │   └── PARAGRAPH {created_at - The create time, in UTC format.}
+│   │       ├── CODE {created_at}
+│   │       └── TEXT { - The create time, in UTC format.}
+│   └── LIST_ITEM
+│       └── PARAGRAPH {updated_at - The update time, in UTC format.}
+│           ├── CODE {updated_at}
+│           └── TEXT { - The update time, in UTC format.}
+├── HEADING {Import}
+│   └── TEXT {Import}
+├── PARAGRAPH {Event subscription target can be imported using subscription_id and id, separated by a slash (/), e.g.}
+│   ├── TEXT {Event subscription target can be imported using }
+│   ├── CODE {subscription_id}
+│   ├── TEXT { and }
+│   ├── CODE {id}
+│   └── TEXT {, separated by a slash (/), e.g.}
+└── CODE_BLOCK {$ terraform import huaweicloud_eg_event_subscription_target.test <subscription_id>/<id>
+}

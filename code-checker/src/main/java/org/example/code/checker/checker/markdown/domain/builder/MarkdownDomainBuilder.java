@@ -88,6 +88,7 @@ public final class MarkdownDomainBuilder {
             throw new RuntimeException("node type is not `HEADING`, can not build.");
         }
 
+        System.out.println(node.getRawStr());
         TreeNode<MdDomain> treeNode = new TreeNode<MdDomain>(
                 node.getNodeId(),
                 new Heading(
@@ -313,8 +314,8 @@ public final class MarkdownDomainBuilder {
     }
 
     public static TreeNode<MdDomain> buildText(MdAstNode node, TreeNode<MdDomain> parent) {
-        if (node == null || node.getNodeType() != MdNodeType.TEXT) {
-            throw new RuntimeException("node type is not `TEXT`, can not build.");
+        if (node == null) {
+            throw new RuntimeException("node is null, can not build `Text`.");
         }
 
         TreeNode<MdDomain> treeNode = new TreeNode<MdDomain>(
@@ -414,10 +415,17 @@ public final class MarkdownDomainBuilder {
             case IMAGE: {
                 return buildImage(node, parent);
             }
-            case HTML_INLINE:
-            default: {
+            case HTML_INLINE: {
+                // 非标准 Markdown（例如 FrontMatter / 内联 HTML），在域模型中退化为普通文本，
+                // 避免抛异常中断整个文档的构建。
                 return buildText(node, parent);
+            }
+            default: {
+                System.err.printf("unsupported inline types: %s", t);
+                System.err.println(node);
+                return null;
             }
         }
     }
 }
+
