@@ -6,18 +6,17 @@ import java.util.UUID;
 
 public class MdAstNode {
 
-    private String fileId;
+    // attribute
     private String nodeId;
-
-    private Integer startOffset;
-    private Integer endOffset;
-    private SourcePosition startPosition;
-    private SourcePosition finishPosition;
-
     private MdNodeType nodeType;
     private String text;
+
+    // file and position
+    private String fileId;
+    private SourceRange sourceRange;
     private String rawStr;
 
+    //
     private MdAstNode parent;
     private List<MdAstNode> children;
     private int depth;
@@ -28,52 +27,12 @@ public class MdAstNode {
         this.children = new ArrayList<>();
     }
 
-    public String getFileId() {
-        return fileId;
-    }
-
-    public void setFileId(String fileId) {
-        this.fileId = fileId;
-    }
-
     public String getNodeId() {
         return nodeId;
     }
 
     public void setNodeId(String nodeId) {
         this.nodeId = nodeId;
-    }
-
-    public Integer getStartOffset() {
-        return startOffset;
-    }
-
-    public void setStartOffset(Integer startOffset) {
-        this.startOffset = startOffset;
-    }
-
-    public Integer getEndOffset() {
-        return endOffset;
-    }
-
-    public void setEndOffset(Integer endOffset) {
-        this.endOffset = endOffset;
-    }
-
-    public SourcePosition getStartPosition() {
-        return startPosition;
-    }
-
-    public void setStartPosition(SourcePosition startPosition) {
-        this.startPosition = startPosition;
-    }
-
-    public SourcePosition getFinishPosition() {
-        return finishPosition;
-    }
-
-    public void setFinishPosition(SourcePosition finishPosition) {
-        this.finishPosition = finishPosition;
     }
 
     public MdNodeType getNodeType() {
@@ -90,6 +49,22 @@ public class MdAstNode {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getFileId() {
+        return fileId;
+    }
+
+    public void setFileId(String fileId) {
+        this.fileId = fileId;
+    }
+
+    public SourceRange getSourceRange() {
+        return sourceRange;
+    }
+
+    public void setSourceRange(SourceRange sourceRange) {
+        this.sourceRange = sourceRange;
     }
 
     public String getRawStr() {

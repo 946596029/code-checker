@@ -1,22 +1,45 @@
 package org.example.code.checker.checker.markdown.parser.ast;
 
-import java.util.List;
+import org.commonmark.node.SourceSpan;
 
-public final class SourceRange {
-    public SourcePosition start;
-    public SourcePosition end;
+public class SourceRange {
+    private final int lineIndex;
+    private final int columnIndex;
+    private final int finishLine;
+    private final int inputIndex;
+    private final int length;
 
-    public static SourceRange rangeOf(MdAstNode node) {
-        if (node == null) return null;
-        Integer s = node.getStartOffset();
-        Integer e = node.getEndOffset();
-        if (s == null || e == null || s < 0 || e < s) return null;
-        SourcePosition sp = new SourcePosition();
-        sp.offset = s; sp.line = 0; sp.column = 0;
-        SourcePosition ep = new SourcePosition();
-        ep.offset = e; ep.line = 0; ep.column = 0;
-        SourceRange r = new SourceRange();
-        r.start = sp; r.end = ep;
-        return r;
+    private SourceRange(
+        int lineIndex,
+        int columnIndex,
+        int inputIndex,
+        int length,
+        int finishLine
+    ) {
+        this.lineIndex = lineIndex;
+        this.columnIndex = columnIndex;
+        this.inputIndex = inputIndex;
+        this.length = length;
+        this.finishLine = finishLine;
+    }
+
+    public int getLineIndex() {
+        return lineIndex;
+    }
+
+    public int getColumnIndex() {
+        return columnIndex;
+    }
+
+    public int getFinishLine() {
+        return finishLine;
+    }
+
+    public int getInputIndex() {
+        return inputIndex;
+    }
+
+    public int getLength() {
+        return length;
     }
 }

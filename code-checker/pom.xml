@@ -32,6 +32,12 @@
             <version>0.27.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>2.5</version>   <!-- 2025-11 最新版 -->
+        </dependency>
+
         <!-- Graph Structure Manage -->
         <dependency>
             <groupId>org.jgrapht</groupId>
@@ -109,8 +115,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version>
                 <configuration>
-                    <source>11</source>
-                    <target>11</target>
+                    <source>15</source>
+                    <target>15</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>

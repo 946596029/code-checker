@@ -7,23 +7,33 @@ import org.commonmark.node.*;
 import org.example.code.checker.checker.markdown.parser.ast.MdAstNode;
 import org.example.code.checker.checker.markdown.parser.ast.MdNodeType;
 import org.commonmark.parser.IncludeSourceSpans;
+import org.yaml.snakeyaml.Yaml;
+
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MdAstGenerator {
 
-    public static Node generateAst(String mdContent) {
-        // 1. 创建解析器
-        Parser parser = Parser.builder()
-                .includeSourceSpans(IncludeSourceSpans.BLOCKS_AND_INLINES) // 仅块级节点
-                .build();
-        // 2. 解析 AST
-        return parser.parse(mdContent);
-    }
+    private static final Pattern FrontMatterDetector = Pattern.compile(
+            "^(---\\s*\\r?\\n([\\s\\S]*?)\\r?\\n---\\s*)$",
+            Pattern.MULTILINE);
 
-    public static MdAstNode generateStandardAst(String mdContent, String fileId) {
-        Node root = generateAst(mdContent);
-        MdAstNode stdRoot = convert(root, null, 0, 0, fileId, mdContent);
-        return stdRoot;
+    public static MdAstNode generateFrontMatterAst(String mdContent) {
+        // 探测是否存在前置元信息
+        Matcher matcher = FrontMatterDetector.matcher(mdContent);
+        // 不存在则返回null
+        if (!matcher.find()) {
+            return null;
+        }
+        // 存在则解析
+        MdAstNode frontMatterNode = new MdAstNode();
+
+        // 暂时只设置文本内容
+        frontMatterNode.setText(matcher.group(1));
+        return frontMatterNode;
     }
 
     private static MdAstNode convert(Node node, MdAstNode parent, int depth, int indexInParent, String fileId, String mdContent) {
@@ -63,8 +73,8 @@ public class MdAstGenerator {
                 if (e > end) end = e;
             }
             if (start >= 0 && end >= start && end <= mdContent.length()) {
-                current.setStartOffset(start);
-                current.setEndOffset(end);
+//                current.setStartOffset(start);
+//                current.setEndOffset(end);
                 current.setRawStr(mdContent.substring(start, end));
             }
         }
@@ -98,5 +108,23 @@ public class MdAstGenerator {
         if (node instanceof HtmlBlock) return MdNodeType.HTML_BLOCK;
         // 若有扩展（表格等）未启用，则不会出现；兜底为 CUSTOM
         return MdNodeType.CUSTOM;
+    }
+
+    public static MdAstNode generateMarkdownContentAst(String mdContent, MdAstNode frontMatterNode) {
+        // 1. 创建解析器
+        Parser parser = Parser.builder()
+                .includeSourceSpans(IncludeSourceSpans.BLOCKS_AND_INLINES) // 仅块级节点
+                .build();
+        // 2. 解析 AST
+        Node root = parser.parse(mdContent);
+
+        // fixme 处理 frontMatterNode 累计行信息
+        return convert(root, null, 0, 0, "", mdContent);
+    }
+
+    public static MdAstNode generate(String mdContent, String fileId) {
+        MdAstNode frontMatterNode = generateFrontMatterAst(mdContent);
+        MdAstNode mdContentRoot = generateMarkdownContentAst(mdContent, frontMatterNode);
+        return null;
     }
 }

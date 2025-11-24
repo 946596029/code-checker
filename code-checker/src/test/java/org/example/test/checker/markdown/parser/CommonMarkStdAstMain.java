@@ -18,7 +18,7 @@ public class CommonMarkStdAstMain {
                 path = args[0];
             }
             String mdContent = FileUtils.getFileContent(path);
-            MdAstNode root = MdAstGenerator.generateStandardAst(mdContent, path);
+            MdAstNode root = MdAstGenerator.generate(mdContent, path);
             StdAstPrinter.print(root);
         } catch (IOException e) {
             e.printStackTrace();

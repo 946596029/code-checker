@@ -47,7 +47,7 @@ public class MarkdownDomainBuilderMain {
 				+ "System.out.println(\"Hello\");\n"
 				+ "```\n";
 
-		MdAstNode root = MdAstGenerator.generateStandardAst(md, "in-memory.md");
+		MdAstNode root = MdAstGenerator.generate(md, "in-memory.md");
 		TreeNode<MdDomain> doc = MarkdownDomainBuilder.buildDocument(root);
 		printDocument(doc);
 	}
