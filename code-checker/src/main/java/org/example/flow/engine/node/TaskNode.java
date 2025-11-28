@@ -6,6 +6,8 @@ import java.util.Map;
 
 public abstract class TaskNode {
 
+    private boolean needStop = false;
+
     private String id;
 
     private List<String> dependencies = Collections.emptyList();
@@ -20,6 +22,14 @@ public abstract class TaskNode {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public boolean isNeedStop() {
+        return needStop;
+    }
+
+    public void setNeedStop(boolean needStop) {
+        this.needStop = needStop;
     }
 
     public List<String> getDependencies() {
@@ -38,5 +48,11 @@ public abstract class TaskNode {
         this.output = task(this.input);
     }
 
+    /**
+     * Legacy method signature for backward compatibility.
+     *
+     * @param input the input data map
+     * @return list of output TaskData
+     */
     public abstract List<TaskData<?>> task(Map<String, TaskData<?>> input);
 }

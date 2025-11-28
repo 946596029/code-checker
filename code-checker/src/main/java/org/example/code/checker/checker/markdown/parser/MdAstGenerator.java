@@ -7,11 +7,12 @@ import org.commonmark.node.*;
 import org.example.code.checker.checker.markdown.parser.ast.MdAstNode;
 import org.example.code.checker.checker.markdown.parser.ast.MdNodeType;
 import org.commonmark.parser.IncludeSourceSpans;
-import org.yaml.snakeyaml.Yaml;
+import org.example.code.checker.checker.markdown.parser.ast.SourceRange;
+import org.example.code.checker.checker.utils.TreeNode;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,7 +22,7 @@ public class MdAstGenerator {
             "^(---\\s*\\r?\\n([\\s\\S]*?)\\r?\\n---\\s*)$",
             Pattern.MULTILINE);
 
-    public static MdAstNode generateFrontMatterAst(String mdContent) {
+    public static TreeNode<MdAstNode> generateFrontMatterAst(String mdContent) {
         // 探测是否存在前置元信息
         Matcher matcher = FrontMatterDetector.matcher(mdContent);
         // 不存在则返回null
@@ -30,63 +31,29 @@ public class MdAstGenerator {
         }
         // 存在则解析
         MdAstNode frontMatterNode = new MdAstNode();
-
-        // 暂时只设置文本内容
-        frontMatterNode.setText(matcher.group(1));
-        return frontMatterNode;
+        // 设置文本
+        String rawText = matcher.group(1);
+        frontMatterNode.setNodeType(MdNodeType.FRONT_MATTER);
+        frontMatterNode.setRawStr(rawText);
+        frontMatterNode.setText(rawText);
+        // 设置目标偏移
+        int line = 0;
+        int column = 0;
+        int inputIndex = 0;
+        int length = rawText.length();
+        frontMatterNode.setSourceRange(new SourceRange(line, column, inputIndex, length));
+        // 返回节点
+        return new TreeNode<>(null, frontMatterNode, null, null, 0, 0);
     }
 
-    private static MdAstNode convert(Node node, MdAstNode parent, int depth, int indexInParent, String fileId, String mdContent) {
-        MdAstNode current = new MdAstNode();
-        current.setFileId(fileId);
-        current.setParent(parent);
-        current.setDepth(depth);
-        current.setIndexInParent(indexInParent);
-        current.setNodeType(mapType(node));
-
-        // 设置文本类节点的文本
-        if (node instanceof Text) {
-            current.setText(((Text) node).getLiteral());
-        } else if (node instanceof Code) {
-            current.setText(((Code) node).getLiteral());
-        } else if (node instanceof HtmlInline) {
-            current.setText(((HtmlInline) node).getLiteral());
-        } else if (node instanceof HtmlBlock) {
-            current.setText(((HtmlBlock) node).getLiteral());
-        } else if (node instanceof FencedCodeBlock) {
-            current.setText(((FencedCodeBlock) node).getLiteral());
-        } else if (node instanceof IndentedCodeBlock) {
-            current.setText(((IndentedCodeBlock) node).getLiteral());
-        } else {
-            current.setText(null);
+    public static String removeFrontMatterStr(String mdContent) {
+        // 探测是否存在前置元信息
+        Matcher matcher = FrontMatterDetector.matcher(mdContent);
+        // 不存在则返回null
+        if (matcher.find()) {
+            return matcher.replaceAll("");
         }
-
-        // 通过 SourceSpan 填充原始源码与偏移
-        List<SourceSpan> spans = node.getSourceSpans();
-        if (spans != null && !spans.isEmpty()) {
-            int start = Integer.MAX_VALUE;
-            int end = -1;
-            for (SourceSpan span : spans) {
-                int s = span.getLineIndex();
-                int e = s + span.getLength();
-                if (s < start) start = s;
-                if (e > end) end = e;
-            }
-            if (start >= 0 && end >= start && end <= mdContent.length()) {
-//                current.setStartOffset(start);
-//                current.setEndOffset(end);
-                current.setRawStr(mdContent.substring(start, end));
-            }
-        }
-
-        // 遍历子节点
-        int childIndex = 0;
-        for (Node child = node.getFirstChild(); child != null; child = child.getNext(), childIndex++) {
-            MdAstNode stdChild = convert(child, current, depth + 1, childIndex, fileId, mdContent);
-            current.addChild(stdChild);
-        }
-
-        return current;
+        return mdContent;
     }
 
     private static MdNodeType mapType(Node node) {
@@ -110,7 +77,66 @@ public class MdAstGenerator {
         return MdNodeType.CUSTOM;
     }
 
-    public static MdAstNode generateMarkdownContentAst(String mdContent, MdAstNode frontMatterNode) {
+    private static TreeNode<MdAstNode> convert(Node node, TreeNode<MdAstNode> parent, int depth, int indexInParent, String fileId, String mdContent) {
+        TreeNode<MdAstNode> treeNode = new TreeNode<>();
+
+        treeNode.setParent(parent);
+        treeNode.setDepth(depth);
+        treeNode.setIndexInParent(indexInParent);
+//        current.setParent(parent);
+//        current.setDepth(depth);
+//        current.setIndexInParent(indexInParent);
+
+        MdAstNode data = new MdAstNode();
+        data.setCommonMarkNode(node);
+        data.setFileId(fileId);
+        data.setNodeType(mapType(node));
+
+        // 设置文本类节点的文本
+        if (node instanceof Text) {
+            data.setText(((Text) node).getLiteral());
+        } else if (node instanceof Code) {
+            data.setText(((Code) node).getLiteral());
+        } else if (node instanceof HtmlInline) {
+            data.setText(((HtmlInline) node).getLiteral());
+        } else if (node instanceof HtmlBlock) {
+            data.setText(((HtmlBlock) node).getLiteral());
+        } else if (node instanceof FencedCodeBlock) {
+            data.setText(((FencedCodeBlock) node).getLiteral());
+        } else if (node instanceof IndentedCodeBlock) {
+            data.setText(((IndentedCodeBlock) node).getLiteral());
+        } else {
+            data.setText(null);
+        }
+
+        // 通过 SourceSpan 填充原始源码与偏移
+        List<SourceSpan> spans = node.getSourceSpans();
+        boolean isSpansNull = spans == null || spans.isEmpty();
+        int line = isSpansNull ? 0 : spans.get(0).getLineIndex();
+        int column = isSpansNull ? 0 : spans.get(0).getColumnIndex();
+        int inputIndex = isSpansNull ? 0 : spans.get(0).getInputIndex();
+        int length = isSpansNull ? 0 : spans.get(0).getLength();
+        if (!isSpansNull && spans.size() > 1) {
+            int spansSize = spans.size();
+            SourceSpan start = spans.get(0);
+            SourceSpan end = spans.get(spansSize-1);
+            length = end.getInputIndex() - start.getInputIndex() + end.getLength();
+        }
+        data.setSourceRange(new SourceRange(line, column, inputIndex, length));
+        data.setRawStr(mdContent.substring(inputIndex, inputIndex+length));
+        treeNode.setData(data);
+
+        // 遍历子节点
+        int childIndex = 0;
+        for (Node child = node.getFirstChild(); child != null; child = child.getNext(), childIndex++) {
+            TreeNode<MdAstNode> stdChild = convert(child, treeNode, depth + 1, childIndex, fileId, mdContent);
+            treeNode.addChild(stdChild);
+        }
+
+        return treeNode;
+    }
+
+    public static TreeNode<MdAstNode> generateMarkdownContentAst(String mdContent) {
         // 1. 创建解析器
         Parser parser = Parser.builder()
                 .includeSourceSpans(IncludeSourceSpans.BLOCKS_AND_INLINES) // 仅块级节点
@@ -118,13 +144,62 @@ public class MdAstGenerator {
         // 2. 解析 AST
         Node root = parser.parse(mdContent);
 
-        // fixme 处理 frontMatterNode 累计行信息
         return convert(root, null, 0, 0, "", mdContent);
     }
 
-    public static MdAstNode generate(String mdContent, String fileId) {
-        MdAstNode frontMatterNode = generateFrontMatterAst(mdContent);
-        MdAstNode mdContentRoot = generateMarkdownContentAst(mdContent, frontMatterNode);
-        return null;
+    private static TreeNode<MdAstNode> combine(TreeNode<MdAstNode> mdContentRoot, TreeNode<MdAstNode> frontMatterNode) throws RuntimeException {
+        if (!MdNodeType.DOCUMENT.equals(mdContentRoot.getData().getNodeType())) {
+            throw new RuntimeException("the root is not document, can not combine.");
+        }
+
+        // 对除Document的所有节点进行SourceRange累加操作
+        List<TreeNode<MdAstNode>> waitList = new ArrayList<>(List.copyOf(mdContentRoot.getChildren()));
+        SourceRange frontMatterRange = frontMatterNode.getData().getSourceRange();
+        while (!waitList.isEmpty()) {
+            // 记录本次缓冲的数量
+            int length = waitList.size();
+            for (int i=0; i<length; i++) {
+                TreeNode<MdAstNode> astNode = waitList.get(i);
+                MdAstNode data = astNode.getData();
+                SourceRange oldRange = data.getSourceRange();
+                int newLine = oldRange.getLine() + frontMatterRange.getLine();
+                int newColumn = oldRange.getColumn();
+                int newInputIndex = oldRange.getInputIndex() + frontMatterRange.getInputIndex();
+                int newLength = oldRange.getLength();
+                data.setSourceRange(new SourceRange(newLine, newColumn, newInputIndex, newLength));
+
+                // 将孩子节点的孩子加入等待队列中
+                waitList.addAll(astNode.getChildren());
+            }
+            // 将已经进行过累加的节点从缓冲队列中移除
+            waitList.removeIf(new Predicate<TreeNode<MdAstNode>>() {
+                @Override
+                public boolean test(TreeNode<MdAstNode> mdAstNode) {
+                    int index = waitList.indexOf(mdAstNode);
+                    return index != -1 && index < length;
+                }
+            });
+        }
+
+        // 将 frontMatterNode 设置为第一个孩子节点
+        mdContentRoot.getChildren().add(0, frontMatterNode);
+        // 返回组装好的内容节点
+        return mdContentRoot;
+    }
+
+    public static TreeNode<MdAstNode> generate(String mdContent, String fileId) {
+        String rawMdContent = mdContent;
+        TreeNode<MdAstNode> frontMatterNode = generateFrontMatterAst(mdContent);
+        mdContent = removeFrontMatterStr(mdContent);
+        TreeNode<MdAstNode> mdContentRoot = generateMarkdownContentAst(mdContent);
+        // 处理根节点
+        TreeNode<MdAstNode> root = frontMatterNode != null
+                ? combine(mdContentRoot, frontMatterNode)
+                : mdContentRoot;
+        SourceRange rootRange = new SourceRange(0, 0, 0, rawMdContent.length());
+        root.getData().setSourceRange(rootRange);
+        root.getData().setRawStr(rawMdContent);
+        root.getData().setText(mdContent);
+        return root;
     }
 }

@@ -4,12 +4,13 @@ import org.example.code.checker.checker.markdown.parser.MdAstGenerator;
 import org.example.code.checker.checker.markdown.parser.ast.MdAstNode;
 import org.example.code.checker.checker.utils.FileUtils;
 import org.example.code.checker.checker.markdown.parser.StdAstPrinter;
+import org.example.code.checker.checker.utils.TreeNode;
 
 import java.io.IOException;
 
 public class CommonMarkStdAstMain {
 
-    public static final String FILE_PATH = "C:\\Users\\Administrator\\Desktop\\cdn_ip_information.md";
+    public static final String FILE_PATH = "C:\\Users\\Administrator\\Desktop\\code-checker\\code-checker\\src\\test\\java\\org\\example\\test\\checker\\markdown\\resource\\huaweicloud_cdn_ip_information.md";
 
     public static void main(String[] args) {
         try {
@@ -18,7 +19,8 @@ public class CommonMarkStdAstMain {
                 path = args[0];
             }
             String mdContent = FileUtils.getFileContent(path);
-            MdAstNode root = MdAstGenerator.generate(mdContent, path);
+            TreeNode<MdAstNode> root = MdAstGenerator.generate(mdContent, path);
+
             StdAstPrinter.print(root);
         } catch (IOException e) {
             e.printStackTrace();

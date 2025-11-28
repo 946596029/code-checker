@@ -2,6 +2,7 @@ package org.example.code.checker.checker.markdown.parser.ast;
 
 public enum MdNodeType {
     DOCUMENT,
+    FRONT_MATTER,
     HEADING,
     PARAGRAPH,
     TEXT,

@@ -1,15 +1,15 @@
 package org.example.code.checker.checker.markdown.task;
 
-import org.example.flow.engine.node.TaskData;
-import org.example.flow.engine.node.TaskNode;
-
 import java.util.List;
 import java.util.Map;
 
-public class DocumentParser extends TaskNode {
+import org.example.code.checker.checker.Checker;
+import org.example.flow.engine.node.TaskData;
+
+public class DocumentChecker extends Checker {
 
     @Override
     public List<TaskData<?>> task(Map<String, TaskData<?>> input) {
-        return List.of();
+        return null;
     }
 }

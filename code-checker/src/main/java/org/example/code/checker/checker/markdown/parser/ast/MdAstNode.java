@@ -1,10 +1,15 @@
 package org.example.code.checker.checker.markdown.parser.ast;
 
+import org.commonmark.node.Node;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class MdAstNode {
+
+    // common mark node
+    private Node commonMarkNode;
 
     // attribute
     private String nodeId;
@@ -25,6 +30,14 @@ public class MdAstNode {
     public MdAstNode() {
         this.nodeId = UUID.randomUUID().toString();
         this.children = new ArrayList<>();
+    }
+
+    public Node getCommonMarkNode() {
+        return commonMarkNode;
+    }
+
+    public void setCommonMarkNode(Node commonMarkNode) {
+        this.commonMarkNode = commonMarkNode;
     }
 
     public String getNodeId() {

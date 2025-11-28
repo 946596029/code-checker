@@ -1,38 +1,29 @@
 package org.example.code.checker.checker.markdown.parser.ast;
 
-import org.commonmark.node.SourceSpan;
-
 public class SourceRange {
-    private final int lineIndex;
-    private final int columnIndex;
-    private final int finishLine;
+    private final int line;
+    private final int column;
     private final int inputIndex;
     private final int length;
 
-    private SourceRange(
-        int lineIndex,
-        int columnIndex,
+    public SourceRange(
+        int line,
+        int column,
         int inputIndex,
-        int length,
-        int finishLine
+        int length
     ) {
-        this.lineIndex = lineIndex;
-        this.columnIndex = columnIndex;
+        this.line = line;
+        this.column = column;
         this.inputIndex = inputIndex;
         this.length = length;
-        this.finishLine = finishLine;
     }
 
-    public int getLineIndex() {
-        return lineIndex;
+    public int getLine() {
+        return line;
     }
 
-    public int getColumnIndex() {
-        return columnIndex;
-    }
-
-    public int getFinishLine() {
-        return finishLine;
+    public int getColumn() {
+        return column;
     }
 
     public int getInputIndex() {

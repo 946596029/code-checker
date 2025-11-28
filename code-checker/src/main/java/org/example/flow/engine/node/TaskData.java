@@ -5,34 +5,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class TaskData<T> {
 
-    private final Class<T> type;
-    private final String source;
-    private final long ts;
+    private final String name;
     private final T payload;
 
     @JsonCreator
     public TaskData(
-        @JsonProperty("type") Class<T> type,
-        @JsonProperty("source") String source,
-        @JsonProperty("ts") long ts,
+            @JsonProperty("name") String name,
         @JsonProperty("payload") T payload
     ) {
-        this.type = type;
-        this.source = source;
-        this.ts = ts;
+        this.name = name;
         this.payload = payload;
     }
 
-    public Class<T> getType() {
-        return type;
-    }
-
-    public String getSource() {
-        return source;
-    }
-
-    public long getTs() {
-        return ts;
+    public String getName() {
+        return name;
     }
 
     public T getPayload() {

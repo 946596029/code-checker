@@ -1,16 +1,11 @@
 DOCUMENT
-├── THEMATIC_BREAK
-├── HEADING {subcategory: "EventGrid (EG)"layout: "huaweicloud"page_title: "HuaweiCloud: huaweicloud_eg_event_subscription_target"description: |-Using this resource to manage EG event subscription target within Hu...}
-│   ├── TEXT {subcategory: "EventGrid (EG)"}
-│   ├── CUSTOM
-│   ├── TEXT {layout: "huaweicloud"}
-│   ├── CUSTOM
-│   ├── TEXT {page_title: "HuaweiCloud: huaweicloud_eg_event_subscription_target"}
-│   ├── CUSTOM
-│   ├── TEXT {description: |-}
-│   ├── CUSTOM
-│   └── TEXT {Using this resource to manage EG event subscription target within Huaweicloud.}
-├── HEADING {huaweicloud_eg_event_subscription_target}
+├── FRONT_MATTER {---
+subcategory: "EventGrid (EG)"
+layout: "huaweicloud"
+page_title: "HuaweiCloud: huaweicloud_eg_event_subscription_target"
+description: |-
+  Using this resource to manage EG event subscription target...}
+├── HEADING[1] {huaweicloud_eg_event_subscription_target}
 │   └── TEXT {huaweicloud_eg_event_subscription_target}
 ├── PARAGRAPH {Using this resource to manage EG event subscription target within Huaweicloud.}
 │   └── TEXT {Using this resource to manage EG event subscription target within Huaweicloud.}
@@ -27,16 +22,16 @@ DOCUMENT
 │   ├── TEXT {in }
 │   ├── CODE {huaweicloud_eg_event_subscription}
 │   └── TEXT { to suppress this diff.}
-├── HEADING {Example Usage}
+├── HEADING[2] {Example Usage}
 │   └── TEXT {Example Usage}
-├── CODE_BLOCK {variable "target_name" {}
+├── CODE_BLOCK[info=hcl] {variable "target_name" {}
 variable "resource_urn" {}
 variable "subscription_id" {}
 
 resource "huaweicloud_eg_event_subscription_target" "test" {
   subscription_id = var.subscription_id
   name         ...}
-├── HEADING {Argument Reference}
+├── HEADING[2] {Argument Reference}
 │   └── TEXT {Argument Reference}
 ├── PARAGRAPH {The following arguments are supported:}
 │   └── TEXT {The following arguments are supported:}
@@ -430,7 +425,7 @@ resource "huaweicloud_eg_event_subscription_target" "test" {
 │       └── PARAGRAPH {topic - (Required, String) Specifies The topic name of the dead letter queue.}
 │           ├── CODE {topic}
 │           └── TEXT { - (Required, String) Specifies The topic name of the dead letter queue.}
-├── HEADING {Attribute Reference}
+├── HEADING[2] {Attribute Reference}
 │   └── TEXT {Attribute Reference}
 ├── PARAGRAPH {In addition to all arguments above, the following attributes are exported:}
 │   └── TEXT {In addition to all arguments above, the following attributes are exported:}
@@ -447,7 +442,7 @@ resource "huaweicloud_eg_event_subscription_target" "test" {
 │       └── PARAGRAPH {updated_at - The update time, in UTC format.}
 │           ├── CODE {updated_at}
 │           └── TEXT { - The update time, in UTC format.}
-├── HEADING {Import}
+├── HEADING[2] {Import}
 │   └── TEXT {Import}
 ├── PARAGRAPH {Event subscription target can be imported using subscription_id and id, separated by a slash (/), e.g.}
 │   ├── TEXT {Event subscription target can be imported using }
@@ -455,5 +450,5 @@ resource "huaweicloud_eg_event_subscription_target" "test" {
 │   ├── TEXT { and }
 │   ├── CODE {id}
 │   └── TEXT {, separated by a slash (/), e.g.}
-└── CODE_BLOCK {$ terraform import huaweicloud_eg_event_subscription_target.test <subscription_id>/<id>
+└── CODE_BLOCK[info=bash] {$ terraform import huaweicloud_eg_event_subscription_target.test <subscription_id>/<id>
 }

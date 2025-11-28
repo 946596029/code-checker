@@ -13,6 +13,16 @@ public class TreeNode<T> {
 
     private T data;
 
+    public TreeNode() {
+        this.nodeId = null;
+        this.parent = null;
+        this.children = new ArrayList<>();
+        this.depth = 0;
+        this.indexInParent = 0;
+
+        this.data = null;
+    }
+
     public TreeNode(String nodeId, T data, TreeNode<T> parent, List<TreeNode<T>> children, Integer depth, Integer indexInParent) {
         this.nodeId = nodeId;
         this.parent = parent;
@@ -25,16 +35,24 @@ public class TreeNode<T> {
 
     // structure operation
 
+    public void setNodeId(String nodeId) {
+        this.nodeId = nodeId;
+    }
+
     public String getNodeId() {
         return nodeId;
+    }
+
+    public void setParent(TreeNode<T> parent) {
+        this.parent = parent;
     }
 
     public TreeNode<T> getParent() {
         return parent;
     }
 
-    public void setParent(TreeNode<T> parent) {
-        this.parent = parent;
+    public void setChildren(List<TreeNode<T>> children) {
+        this.children = children != null ? children : new ArrayList<>();
     }
 
     public List<TreeNode<T>> getChildren() {
@@ -73,8 +91,16 @@ public class TreeNode<T> {
         return data;
     }
 
+    public void setDepth(int depth) {
+        this.depth = depth;
+    }
+
     public int getDepth() {
         return depth;
+    }
+
+    public void setIndexInParent(int indexInParent) {
+        this.indexInParent = indexInParent;
     }
 
     public int getIndexInParent() { return indexInParent; }

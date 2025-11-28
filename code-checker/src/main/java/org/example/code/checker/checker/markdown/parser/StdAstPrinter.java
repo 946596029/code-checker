@@ -2,6 +2,7 @@ package org.example.code.checker.checker.markdown.parser;
 
 import org.example.code.checker.checker.markdown.parser.ast.MdAstNode;
 import org.example.code.checker.checker.markdown.parser.ast.MdNodeType;
+import org.example.code.checker.checker.utils.TreeNode;
 
 import java.util.List;
 
@@ -9,11 +10,11 @@ public final class StdAstPrinter {
 
     private StdAstPrinter() {}
 
-    public static void print(MdAstNode root) {
+    public static void print(TreeNode<MdAstNode> root) {
         if (root == null) return;
         // Print root without branch symbols
         System.out.println(buildNodeLabel(root));
-        List<MdAstNode> children = root.getChildren();
+        List<TreeNode<MdAstNode>> children = root.getChildren();
         if (children == null || children.isEmpty()) return;
         for (int i = 0; i < children.size(); i++) {
             boolean last = (i == children.size() - 1);
@@ -21,11 +22,11 @@ public final class StdAstPrinter {
         }
     }
 
-    private static void printNode(MdAstNode node, String prefix, boolean isTail) {
+    private static void printNode(TreeNode<MdAstNode> node, String prefix, boolean isTail) {
         String branch = prefix + (isTail ? "└── " : "├── ");
         System.out.println(branch + buildNodeLabel(node));
 
-        List<MdAstNode> children = node.getChildren();
+        List<TreeNode<MdAstNode>> children = node.getChildren();
         if (children == null || children.isEmpty()) return;
 
         String childPrefix = prefix + (isTail ? "    " : "│   ");
@@ -35,9 +36,9 @@ public final class StdAstPrinter {
         }
     }
 
-    private static String buildNodeLabel(MdAstNode node) {
+    private static String buildNodeLabel(TreeNode<MdAstNode> node) {
         StringBuilder sb = new StringBuilder();
-        MdNodeType type = node.getNodeType();
+        MdNodeType type = node.getData().getNodeType();
         sb.append(type != null ? type.name() : "UNKNOWN");
 
         String extras = buildExtras(node);
@@ -52,10 +53,10 @@ public final class StdAstPrinter {
         return sb.toString();
     }
 
-    private static String buildExtras(MdAstNode node) {
-        MdNodeType type = node.getNodeType();
+    private static String buildExtras(TreeNode<MdAstNode> node) {
+        MdNodeType type = node.getData().getNodeType();
         if (type == null) return "";
-        String raw = node.getRawStr();
+        String raw = node.getData().getRawStr();
         if (raw == null) raw = "";
 
         switch (type) {
@@ -96,31 +97,35 @@ public final class StdAstPrinter {
         return info.replace("`", "").replace("~", "").trim();
     }
 
-    private static String buildDisplayText(MdAstNode node) {
-        MdNodeType type = node.getNodeType();
+    private static String buildDisplayText(TreeNode<MdAstNode> node) {
+        MdNodeType type = node.getData().getNodeType();
         if (type == MdNodeType.TEXT || type == MdNodeType.CODE || type == MdNodeType.HTML_BLOCK || type == MdNodeType.HTML_INLINE || type == MdNodeType.CODE_BLOCK) {
-            return summarize(node.getText());
+            return summarize(node.getData().getText());
         }
         if (type == MdNodeType.PARAGRAPH || type == MdNodeType.HEADING) {
+            String aggregated = aggregateText(node);
+            return summarize(aggregated);
+        }
+        if (type == MdNodeType.FRONT_MATTER) {
             String aggregated = aggregateText(node);
             return summarize(aggregated);
         }
         return "";
     }
 
-    private static String aggregateText(MdAstNode node) {
+    private static String aggregateText(TreeNode<MdAstNode> node) {
         StringBuilder sb = new StringBuilder();
         collectText(node, sb);
         return sb.toString();
     }
 
-    private static void collectText(MdAstNode node, StringBuilder out) {
+    private static void collectText(TreeNode<MdAstNode> node, StringBuilder out) {
         if (node == null) return;
-        String t = node.getText();
+        String t = node.getData().getText();
         if (t != null) out.append(t);
-        List<MdAstNode> children = node.getChildren();
+        List<TreeNode<MdAstNode>> children = node.getChildren();
         if (children == null) return;
-        for (MdAstNode c : children) collectText(c, out);
+        for (TreeNode<MdAstNode> c : children) collectText(c, out);
     }
 
     private static String summarize(String s) {
