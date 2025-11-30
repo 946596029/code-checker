@@ -23,13 +23,44 @@ public class FlowEngine {
      * Execute given task nodes in the order defined by their dependencies.
      * Nodes with no dependencies will be executed first, followed by nodes
      * whose dependencies have already completed.
+     * If a node sets needStop to true, all nodes that depend on it (directly or indirectly)
+     * will be skipped.
      *
      * @param nodes list of task nodes to execute
      */
     public void execute(List<TaskNode> nodes) {
+        DirectedAcyclicGraph<TaskNode, DefaultEdge> graph = buildGraph(nodes);
         List<TaskNode> ordered = topologicalSort(nodes);
+        
+        // Track which nodes have been stopped (either directly or due to dependency failure)
+        Map<String, Boolean> nodeStopped = new HashMap<>();
+        for (TaskNode node : nodes) {
+            nodeStopped.put(node.getId(), false);
+        }
+        
         for (TaskNode node : ordered) {
+            // Check if any dependency has stopped
+            boolean dependencyStopped = false;
+            for (String dependencyId : node.getDependencies()) {
+                if (nodeStopped.get(dependencyId)) {
+                    dependencyStopped = true;
+                    break;
+                }
+            }
+            
+            // Skip this node if any dependency has stopped
+            if (dependencyStopped) {
+                nodeStopped.put(node.getId(), true);
+                continue;
+            }
+            
+            // Execute the node
             node.execute();
+            
+            // Check if this node needs to stop
+            if (node.isNeedStop()) {
+                nodeStopped.put(node.getId(), true);
+            }
         }
     }
 

@@ -32,14 +32,13 @@ public class StructureChecker extends Checker {
         }
         String fileId = (String) fileIdData.getPayload();
 
-        // Check required sections and collect results
-        List<TreeNode<MdAstNode>> frontMatterSection = checkFrontMatter(document, fileId, errors);
-        List<TreeNode<MdAstNode>> titleSection = checkTitle(document, fileId, errors);
-        List<TreeNode<MdAstNode>> exampleUsageSection = checkExampleUsage(document, fileId, errors);
-        List<TreeNode<MdAstNode>> argumentReferenceSection = checkArgumentReference(document, fileId, errors);
-        List<TreeNode<MdAstNode>> attributeReferenceSection = checkAttributeReference(document, fileId, errors);
+        // Check section order: Title -> Example Usage -> Argument Reference -> Attribute Reference
+        checkSectionOrder(document, fileId, errors);
 
-        // Convert errors to TaskData list
+        // Check line formatting: trailing spaces and line length
+        checkLineFormatting(document, fileId, errors);
+
+        // Return result
         List<TaskData<?>> result = new ArrayList<>();
         if (errors.size() > 0) {
             setErrorList(errors);
@@ -47,56 +46,20 @@ public class StructureChecker extends Checker {
             return null;
         }
 
-        // Add all section results to output
-        if (frontMatterSection != null) {
-            result.add(new TaskData<>("frontMatterSection", frontMatterSection));
-        }
-        if (titleSection != null) {
-            result.add(new TaskData<>("titleSection", titleSection));
-        }
-        if (exampleUsageSection != null) {
-            result.add(new TaskData<>("exampleUsageSection", exampleUsageSection));
-        }
-        if (argumentReferenceSection != null) {
-            result.add(new TaskData<>("argumentReferenceSection", argumentReferenceSection));
-        }
-        if (attributeReferenceSection != null) {
-            result.add(new TaskData<>("attributeReferenceSection", attributeReferenceSection));
-        }
-
         return result;
     }
 
-    private List<TreeNode<MdAstNode>> checkFrontMatter(TreeNode<MdAstNode> document, String fileId,
-            List<CheckError> errors) {
-        Optional<TreeNode<MdAstNode>> frontMatter = document.query()
-                .children()
-                .ofType(MdAstNode.class)
-                .filter(MdAstNode.class, data -> data != null && data.getNodeType() == MdNodeType.FRONT_MATTER)
-                .first();
-
-        if (frontMatter.isEmpty()) {
-            String message = buildErrorMessage(
-                    "StructureChecker.MissingFrontMatter",
-                    "Document is missing required FrontMatter section",
-                    fileId,
-                    null,
-                    null,
-                    "DOCUMENT");
-            errors.add(CheckError.builder()
-                    .message(message)
-                    .severity(CheckError.Severity.ERROR)
-                    .build());
-            return null;
-        }
-
-        return List.of(frontMatter.get());
-    }
-
-    private List<TreeNode<MdAstNode>> checkTitle(TreeNode<MdAstNode> document, String fileId, List<CheckError> errors) {
-        // Check for level 1 heading (title name)
+    /**
+     * Checks the order of sections: Title -> Example Usage -> Argument Reference -> Attribute Reference
+     */
+    private void checkSectionOrder(TreeNode<MdAstNode> document, String fileId, List<CheckError> errors) {
+        // Find all required headings
         Optional<TreeNode<MdAstNode>> titleHeading = findHeadingByLevelAndText(document, 1, null);
+        Optional<TreeNode<MdAstNode>> exampleHeading = findHeadingByLevelAndText(document, 2, "Example Usage");
+        Optional<TreeNode<MdAstNode>> argumentHeading = findHeadingByLevelAndText(document, 2, "Argument Reference");
+        Optional<TreeNode<MdAstNode>> attributeHeading = findHeadingByLevelAndText(document, 2, "Attribute Reference");
 
+        // If any section is missing, report error and skip order check
         if (titleHeading.isEmpty()) {
             String message = buildErrorMessage(
                     "StructureChecker.MissingTitle",
@@ -109,21 +72,8 @@ public class StructureChecker extends Checker {
                     .message(message)
                     .severity(CheckError.Severity.ERROR)
                     .build());
-            return null;
+            return;
         }
-
-        // Find the next heading (any level) after title heading
-        TreeNode<MdAstNode> titleNode = titleHeading.get();
-        TreeNode<MdAstNode> nextHeading = findNextHeading(titleNode, 2);
-
-        // Collect all nodes from title heading to next heading (excluding next heading)
-        return collectNodesBetween(titleNode, nextHeading);
-    }
-
-    private List<TreeNode<MdAstNode>> checkExampleUsage(TreeNode<MdAstNode> document, String fileId,
-            List<CheckError> errors) {
-        // Check for "Example Usage" heading (level 2)
-        Optional<TreeNode<MdAstNode>> exampleHeading = findHeadingByLevelAndText(document, 2, "Example Usage");
 
         if (exampleHeading.isEmpty()) {
             String message = buildErrorMessage(
@@ -137,22 +87,8 @@ public class StructureChecker extends Checker {
                     .message(message)
                     .severity(CheckError.Severity.ERROR)
                     .build());
-            return null;
+            return;
         }
-
-        // Find the next heading of the same level (level 2) after Example Usage heading
-        TreeNode<MdAstNode> exampleNode = exampleHeading.get();
-        TreeNode<MdAstNode> nextSameLevelHeading = findNextHeading(exampleNode, 2);
-
-        // Collect all nodes from Example Usage heading to next same-level heading
-        // (excluding next heading)
-        return collectNodesBetween(exampleNode, nextSameLevelHeading);
-    }
-
-    private List<TreeNode<MdAstNode>> checkArgumentReference(TreeNode<MdAstNode> document, String fileId,
-            List<CheckError> errors) {
-        // Check for "Argument Reference" heading (level 2)
-        Optional<TreeNode<MdAstNode>> argumentHeading = findHeadingByLevelAndText(document, 2, "Argument Reference");
 
         if (argumentHeading.isEmpty()) {
             String message = buildErrorMessage(
@@ -166,23 +102,8 @@ public class StructureChecker extends Checker {
                     .message(message)
                     .severity(CheckError.Severity.ERROR)
                     .build());
-            return null;
+            return;
         }
-
-        // Find the next heading of the same level (level 2) after Argument Reference
-        // heading
-        TreeNode<MdAstNode> argumentNode = argumentHeading.get();
-        TreeNode<MdAstNode> nextSameLevelHeading = findNextHeading(argumentNode, 2);
-
-        // Collect all nodes from Argument Reference heading to next same-level heading
-        // (excluding next heading)
-        return collectNodesBetween(argumentNode, nextSameLevelHeading);
-    }
-
-    private List<TreeNode<MdAstNode>> checkAttributeReference(TreeNode<MdAstNode> document, String fileId,
-            List<CheckError> errors) {
-        // Check for "Attribute Reference" heading (level 2)
-        Optional<TreeNode<MdAstNode>> attributeHeading = findHeadingByLevelAndText(document, 2, "Attribute Reference");
 
         if (attributeHeading.isEmpty()) {
             String message = buildErrorMessage(
@@ -196,17 +117,57 @@ public class StructureChecker extends Checker {
                     .message(message)
                     .severity(CheckError.Severity.ERROR)
                     .build());
-            return null;
+            return;
         }
 
-        // Find the next heading of the same level (level 2) after Attribute Reference
-        // heading
-        TreeNode<MdAstNode> attributeNode = attributeHeading.get();
-        TreeNode<MdAstNode> nextSameLevelHeading = findNextHeading(attributeNode, 2);
+        // Get positions of each heading in the document
+        int titlePosition = getNodePosition(document, titleHeading.get());
+        int examplePosition = getNodePosition(document, exampleHeading.get());
+        int argumentPosition = getNodePosition(document, argumentHeading.get());
+        int attributePosition = getNodePosition(document, attributeHeading.get());
 
-        // Collect all nodes from Attribute Reference heading to next same-level heading
-        // (excluding next heading)
-        return collectNodesBetween(attributeNode, nextSameLevelHeading);
+        // Check order: Title < Example Usage < Argument Reference < Attribute Reference
+        if (titlePosition >= examplePosition) {
+            String message = buildErrorMessage(
+                    "StructureChecker.InvalidSectionOrder",
+                    "Section order is incorrect. Title must come before Example Usage",
+                    fileId,
+                    titleHeading.get().getData() != null ? titleHeading.get().getData().getSourceRange() : null,
+                    titleHeading.get().getData() != null ? titleHeading.get().getData().getNodeId() : null,
+                    "HEADING");
+            errors.add(CheckError.builder()
+                    .message(message)
+                    .severity(CheckError.Severity.ERROR)
+                    .build());
+        }
+
+        if (examplePosition >= argumentPosition) {
+            String message = buildErrorMessage(
+                    "StructureChecker.InvalidSectionOrder",
+                    "Section order is incorrect. Example Usage must come before Argument Reference",
+                    fileId,
+                    exampleHeading.get().getData() != null ? exampleHeading.get().getData().getSourceRange() : null,
+                    exampleHeading.get().getData() != null ? exampleHeading.get().getData().getNodeId() : null,
+                    "HEADING");
+            errors.add(CheckError.builder()
+                    .message(message)
+                    .severity(CheckError.Severity.ERROR)
+                    .build());
+        }
+
+        if (argumentPosition >= attributePosition) {
+            String message = buildErrorMessage(
+                    "StructureChecker.InvalidSectionOrder",
+                    "Section order is incorrect. Argument Reference must come before Attribute Reference",
+                    fileId,
+                    argumentHeading.get().getData() != null ? argumentHeading.get().getData().getSourceRange() : null,
+                    argumentHeading.get().getData() != null ? argumentHeading.get().getData().getNodeId() : null,
+                    "HEADING");
+            errors.add(CheckError.builder()
+                    .message(message)
+                    .severity(CheckError.Severity.ERROR)
+                    .build());
+        }
     }
 
     /**
@@ -243,69 +204,220 @@ public class StructureChecker extends Checker {
     }
 
     /**
-     * Finds the next heading node after the given node.
-     *
-     * @param startNode The starting node
-     * @param level     Optional heading level to match. If null, matches any
-     *                  heading
-     *                  level
-     * @return The next heading node, or null if not found
+     * Gets the position of a node in the document's children list.
+     * Returns -1 if not found.
      */
-    private TreeNode<MdAstNode> findNextHeading(TreeNode<MdAstNode> startNode, Integer level) {
-        TreeNode<MdAstNode> parent = startNode.getParent();
-        if (parent == null) {
-            return null;
+    private int getNodePosition(TreeNode<MdAstNode> document, TreeNode<MdAstNode> targetNode) {
+        // Get all direct children of the document
+        List<TreeNode<MdAstNode>> children = document.getChildren();
+        if (children == null) {
+            return -1;
         }
 
-        List<TreeNode<MdAstNode>> siblings = parent.getChildren();
-        int startIndex = siblings.indexOf(startNode);
-
-        for (int i = startIndex + 1; i < siblings.size(); i++) {
-            MdAstNode siblingData = siblings.get(i).getData();
-            if (siblingData.getNodeType() == MdNodeType.HEADING) {
-                if (level == null) {
-                    // Match any heading level
-                    return siblings.get(i);
-                } else {
-                    // Match specific level
-                    Heading heading = (Heading) siblingData.getCommonMarkNode();
-                    if (heading != null && heading.getLevel() == level) {
-                        return siblings.get(i);
-                    }
-                }
+        // Search for the target node in the children list
+        for (int i = 0; i < children.size(); i++) {
+            if (children.get(i) == targetNode) {
+                return i;
             }
         }
 
-        return null;
+        // If not found in direct children, search recursively
+        // But for headings, they should be direct children of document
+        return -1;
     }
 
     /**
-     * Collects all nodes between startNode and endNode (excluding endNode).
-     *
-     * @param startNode The starting node (inclusive)
-     * @param endNode   The ending node (exclusive). If null, collects until the end
-     *                  of parent's children
-     * @return List of nodes between startNode and endNode
+     * Checks line formatting: trailing spaces and line length (max 120 characters).
      */
-    private List<TreeNode<MdAstNode>> collectNodesBetween(TreeNode<MdAstNode> startNode,
-            TreeNode<MdAstNode> endNode) {
-        List<TreeNode<MdAstNode>> content = new ArrayList<>();
-        TreeNode<MdAstNode> parent = startNode.getParent();
-
-        if (parent != null) {
-            List<TreeNode<MdAstNode>> siblings = parent.getChildren();
-            int startIndex = siblings.indexOf(startNode);
-            int endIndex = endNode != null ? siblings.indexOf(endNode) : siblings.size();
-
-            for (int i = startIndex; i < endIndex; i++) {
-                content.add(siblings.get(i));
-            }
-        } else {
-            // If no parent, just add the start node itself
-            content.add(startNode);
+    private void checkLineFormatting(TreeNode<MdAstNode> document, String fileId, List<CheckError> errors) {
+        MdAstNode documentData = document.getData();
+        if (documentData == null) {
+            return;
         }
 
-        return content;
+        String rawStr = documentData.getRawStr();
+        if (rawStr == null) {
+            return;
+        }
+
+        // Process line by line to accurately track positions
+        int lineNumber = 1; // 1-based line number
+        int lineStartIndex = 0; // Start index of current line in rawStr
+        int column = 0;
+        
+        for (int i = 0; i < rawStr.length(); i++) {
+            char c = rawStr.charAt(i);
+            
+            // Check for newline characters
+            if (c == '\n' || (c == '\r' && (i + 1 >= rawStr.length() || rawStr.charAt(i + 1) != '\n'))) {
+                // Process the line that just ended
+                int lineEndIndex = (c == '\r' && i + 1 < rawStr.length() && rawStr.charAt(i + 1) == '\n') 
+                        ? i : i;
+                String line = rawStr.substring(lineStartIndex, lineEndIndex);
+                int lineLength = line.length();
+                
+                // Check for trailing spaces - only allow 0 or 2 spaces, no other characters
+                if (lineLength > 0) {
+                    // Find the last non-whitespace character
+                    int lastNonWhitespace = lineLength - 1;
+                    while (lastNonWhitespace >= 0 && line.charAt(lastNonWhitespace) == ' ') {
+                        lastNonWhitespace--;
+                    }
+                    
+                    int trailingStart = lastNonWhitespace + 1;
+                    int trailingSpaceCount = lineLength - trailingStart;
+                    
+                    // Check if there are any non-space trailing characters (like tabs)
+                    boolean hasNonSpaceTrailing = false;
+                    for (int j = trailingStart; j < lineLength; j++) {
+                        if (line.charAt(j) != ' ') {
+                            hasNonSpaceTrailing = true;
+                            break;
+                        }
+                    }
+                    
+                    // Report error if:
+                    // 1. Has non-space trailing characters (like tabs)
+                    // 2. Has trailing spaces but count is not 0 or 2
+                    if (hasNonSpaceTrailing) {
+                        String message = buildErrorMessage(
+                                "StructureChecker.InvalidTrailingWhitespace",
+                                String.format("Line %d has invalid trailing characters. Only 0 or 2 spaces are allowed at line end.", lineNumber),
+                                fileId,
+                                new org.example.code.checker.checker.markdown.parser.ast.SourceRange(
+                                        lineNumber - 1, trailingStart, lineStartIndex + trailingStart, lineLength - trailingStart),
+                                documentData.getNodeId(),
+                                "DOCUMENT");
+                        errors.add(CheckError.builder()
+                                .message(message)
+                                .severity(CheckError.Severity.ERROR)
+                                .build());
+                    } else if (trailingSpaceCount > 0 && trailingSpaceCount != 2) {
+                        String message = buildErrorMessage(
+                                "StructureChecker.InvalidTrailingWhitespace",
+                                String.format("Line %d has %d trailing spaces. Only 0 or 2 spaces are allowed at line end.", 
+                                        lineNumber, trailingSpaceCount),
+                                fileId,
+                                new org.example.code.checker.checker.markdown.parser.ast.SourceRange(
+                                        lineNumber - 1, trailingStart, lineStartIndex + trailingStart, trailingSpaceCount),
+                                documentData.getNodeId(),
+                                "DOCUMENT");
+                        errors.add(CheckError.builder()
+                                .message(message)
+                                .severity(CheckError.Severity.ERROR)
+                                .build());
+                    }
+                }
+                
+                // Check line length (max 120 characters)
+                if (lineLength > 120) {
+                    String message = buildErrorMessage(
+                            "StructureChecker.LineTooLong",
+                            String.format("Line %d exceeds maximum length of 120 characters (found %d characters)", 
+                                    lineNumber, lineLength),
+                            fileId,
+                            new org.example.code.checker.checker.markdown.parser.ast.SourceRange(
+                                    lineNumber - 1, 0, lineStartIndex, lineLength),
+                            documentData.getNodeId(),
+                            "DOCUMENT");
+                    errors.add(CheckError.builder()
+                            .message(message)
+                            .severity(CheckError.Severity.ERROR)
+                            .build());
+                }
+                
+                // Move to next line
+                lineNumber++;
+                if (c == '\r' && i + 1 < rawStr.length() && rawStr.charAt(i + 1) == '\n') {
+                    lineStartIndex = i + 2; // Skip \r\n
+                    i++; // Skip the \n in next iteration
+                } else {
+                    lineStartIndex = i + 1; // Skip \n
+                }
+                column = 0;
+            } else if (c == '\r' && i + 1 < rawStr.length() && rawStr.charAt(i + 1) == '\n') {
+                // This is part of \r\n, will be handled in next iteration
+                continue;
+            } else {
+                column++;
+            }
+        }
+        
+        // Process the last line (if file doesn't end with newline)
+        if (lineStartIndex < rawStr.length()) {
+            String line = rawStr.substring(lineStartIndex);
+            int lineLength = line.length();
+            
+            // Check for trailing spaces - only allow 0 or 2 spaces, no other characters
+            if (lineLength > 0) {
+                // Find the last non-whitespace character
+                int lastNonWhitespace = lineLength - 1;
+                while (lastNonWhitespace >= 0 && line.charAt(lastNonWhitespace) == ' ') {
+                    lastNonWhitespace--;
+                }
+                
+                int trailingStart = lastNonWhitespace + 1;
+                int trailingSpaceCount = lineLength - trailingStart;
+                
+                // Check if there are any non-space trailing characters (like tabs)
+                boolean hasNonSpaceTrailing = false;
+                for (int j = trailingStart; j < lineLength; j++) {
+                    if (line.charAt(j) != ' ') {
+                        hasNonSpaceTrailing = true;
+                        break;
+                    }
+                }
+                
+                // Report error if:
+                // 1. Has non-space trailing characters (like tabs)
+                // 2. Has trailing spaces but count is not 0 or 2
+                if (hasNonSpaceTrailing) {
+                    String message = buildErrorMessage(
+                            "StructureChecker.InvalidTrailingWhitespace",
+                            String.format("Line %d has invalid trailing characters. Only 0 or 2 spaces are allowed at line end.", lineNumber),
+                            fileId,
+                            new org.example.code.checker.checker.markdown.parser.ast.SourceRange(
+                                    lineNumber - 1, trailingStart, lineStartIndex + trailingStart, lineLength - trailingStart),
+                            documentData.getNodeId(),
+                            "DOCUMENT");
+                    errors.add(CheckError.builder()
+                            .message(message)
+                            .severity(CheckError.Severity.ERROR)
+                            .build());
+                } else if (trailingSpaceCount > 0 && trailingSpaceCount != 2) {
+                    String message = buildErrorMessage(
+                            "StructureChecker.InvalidTrailingWhitespace",
+                            String.format("Line %d has %d trailing spaces. Only 0 or 2 spaces are allowed at line end.", 
+                                    lineNumber, trailingSpaceCount),
+                            fileId,
+                            new org.example.code.checker.checker.markdown.parser.ast.SourceRange(
+                                    lineNumber - 1, trailingStart, lineStartIndex + trailingStart, trailingSpaceCount),
+                            documentData.getNodeId(),
+                            "DOCUMENT");
+                    errors.add(CheckError.builder()
+                            .message(message)
+                            .severity(CheckError.Severity.ERROR)
+                            .build());
+                }
+            }
+            
+            // Check line length
+            if (lineLength > 120) {
+                String message = buildErrorMessage(
+                        "StructureChecker.LineTooLong",
+                        String.format("Line %d exceeds maximum length of 120 characters (found %d characters)", 
+                                lineNumber, lineLength),
+                        fileId,
+                        new org.example.code.checker.checker.markdown.parser.ast.SourceRange(
+                                lineNumber - 1, 0, lineStartIndex, lineLength),
+                        documentData.getNodeId(),
+                        "DOCUMENT");
+                errors.add(CheckError.builder()
+                        .message(message)
+                        .severity(CheckError.Severity.ERROR)
+                        .build());
+            }
+        }
     }
 
     private String extractHeadingText(TreeNode<MdAstNode> node) {

@@ -12,6 +12,7 @@ import org.yaml.snakeyaml.Yaml;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,25 +34,44 @@ public class FrontMatterChecker extends Checker {
     public List<TaskData<?>> task(Map<String, TaskData<?>> input) {
         List<CheckError> errors = new ArrayList<>();
 
-        // Get frontMatterSection from input
-        TaskData<?> frontMatterSectionData = input.get("frontMatterSection");
-        if (frontMatterSectionData == null) {
-            throw new IllegalArgumentException("Missing required input: frontMatterSection");
+        // Get originalDocument from input
+        TaskData<?> documentData = input.get("originalDocument");
+        if (documentData == null) {
+            throw new IllegalArgumentException("Missing required input: originalDocument");
         }
 
         @SuppressWarnings("unchecked")
-        List<TreeNode<MdAstNode>> frontMatterSection = (List<TreeNode<MdAstNode>>) frontMatterSectionData.getPayload();
-
-        if (frontMatterSection == null || frontMatterSection.isEmpty()) {
-            throw new IllegalArgumentException("frontMatterSection is empty");
-        }
+        TreeNode<MdAstNode> document = (TreeNode<MdAstNode>) documentData.getPayload();
 
         // Get fileId for error reporting
         TaskData<?> fileIdData = input.get("fileId");
         String fileId = fileIdData != null ? (String) fileIdData.getPayload() : null;
 
-        // Extract front matter node
-        TreeNode<MdAstNode> frontMatterNode = frontMatterSection.get(0);
+        // Find front matter node from document
+        Optional<TreeNode<MdAstNode>> frontMatterOpt = document.query()
+                .children()
+                .ofType(MdAstNode.class)
+                .filter(MdAstNode.class, data -> data != null && data.getNodeType() == MdNodeType.FRONT_MATTER)
+                .first();
+
+        if (frontMatterOpt.isEmpty()) {
+            String message = buildErrorMessage(
+                    "FrontMatterChecker.MissingFrontMatter",
+                    "Document is missing required FrontMatter section",
+                    fileId,
+                    null,
+                    null,
+                    "DOCUMENT");
+            errors.add(CheckError.builder()
+                    .message(message)
+                    .severity(CheckError.Severity.ERROR)
+                    .build());
+            setErrorList(errors);
+            setNeedStop(true);
+            return null;
+        }
+
+        TreeNode<MdAstNode> frontMatterNode = frontMatterOpt.get();
         MdAstNode nodeData = frontMatterNode.getData();
 
         if (nodeData == null || nodeData.getNodeType() != MdNodeType.FRONT_MATTER) {
