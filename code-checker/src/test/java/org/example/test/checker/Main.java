@@ -22,7 +22,5 @@ public class Main {
 //            e.printStackTrace();
 //            System.exit(1);
 //        }
-        String msg = new org.example.demo.KotlinSample().greet("World");
-        System.out.println(msg);
     }
 }
